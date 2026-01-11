@@ -33,6 +33,9 @@ public class Puzzle {
         }
         return true; 
     }
+    public Pieza getPieza(int row, int col){
+        return this.tablero[row][col];
+    }
     /*
     Funcion que verifica si la pieza a colocar es valida (para verificar solucion).
     verifica arriba y izquierda.

@@ -80,5 +80,9 @@ public class Pieza {
         this.id = id;
     }
     
+    @Override
+    public String toString(){
+        return String.valueOf(this.top) + String.valueOf(this.right)+ String.valueOf(this.bottom) + String.valueOf(this.left);
+    }
     
 }

@@ -4,6 +4,9 @@
  */
 package algoritmos;
 
+import conceptos.Puzzle;
+import conceptos.PuzzleFactory;
+
 /**
  * @author: 
  * 
@@ -15,9 +18,13 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Probando github");
-        System.out.println("uygvsedhujb");
-        System.out.println("Prueba 2 lolololol");
+        Puzzle puzzle = new Puzzle( 5);
+        System.out.println("Puzle 5x5 vacio");
+        puzzle.print();
+        System.out.println("Puzle 5x5 resuelto; orden: top, right, bottom, left");
+        puzzle = PuzzleFactory.createRandom(5, 9);
+        puzzle.print();
+        System.out.println("Falta mezclar");
     }
 
 }
