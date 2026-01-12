@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package algoritmos;
-
+import java.util.*;
 import conceptos.Puzzle;
 import conceptos.PuzzleFactory;
 
@@ -13,18 +13,21 @@ import conceptos.PuzzleFactory;
  * 
  */
 public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
+    
+    public Puzzle desordenarPuzzle(Puzzle rompCabezas){
+        
+        return null;
+        
+    }
+    
     public static void main(String[] args) {
-        Puzzle puzzle = new Puzzle( 5);
-        System.out.println("Puzle 5x5 vacio");
+        Puzzle puzzle = new Puzzle(3);
         puzzle.print();
-        System.out.println("Puzle 5x5 resuelto; orden: top, right, bottom, left");
-        puzzle = PuzzleFactory.createRandom(5, 9);
+        puzzle = PuzzleFactory.createRandom(3, 5);
         puzzle.print();
-        System.out.println("Falta mezclar");
+        Collections.shuffle((List<?>) puzzle);
+        puzzle.print();
+        
     }
 
 }
