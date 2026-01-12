@@ -59,11 +59,15 @@ public class Puzzle {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             System.out.print(this.tablero[i][j] == null ? "---- " : this.tablero[i][j] + " ");
-        }
+            }
         System.out.println();
+        }
     }
-}
 
+    public int getRow(int posicion){ return posicion / this.size; }
+    
+    public int getCol(int posicion){  return posicion % this.size;  }
+    
     public int getSize() {
         return size;
     }
