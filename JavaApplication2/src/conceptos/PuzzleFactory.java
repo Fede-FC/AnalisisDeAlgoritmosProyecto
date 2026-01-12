@@ -5,6 +5,7 @@
 package conceptos;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -43,5 +44,38 @@ public class PuzzleFactory {
         
         
         return puzzle;
+    }
+     public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
+        ArrayList<Pieza> lista = new ArrayList<>();
+        int tamano= rompCabezas.getSize();
+        int indice=0;
+        
+        //Basicamente crre una lista de piezas, esto lo hago por que hay un
+        //metodo que desordena las lista automaticamente
+        for (int i=0; i<tamano; i++ ){
+            for (int j=0; j<tamano; j++ ){
+                Pieza pieza= rompCabezas.getPieza(i, j);
+                if (pieza!=null){
+                    lista.add(pieza);
+                }
+            }
+            
+        }
+        
+        //Ahora se desordena la lista
+        Collections.shuffle(lista);
+        
+        //Aqui se cambia los valores de las piezas de rompCabezas por los de 
+        //lista(son los mismos en distinto orden), por lo que ahora si se puede
+        //usar con los algoritmos
+        for (int i=0; i<tamano; i++ ){
+            for (int j=0; j<tamano; j++ ){
+                rompCabezas.colocarPieza(i, j, lista.get(indice++));
+                
+            }
+        }
+        
+        //se devuelve la lista desordenada
+        return rompCabezas;
     }
 }
