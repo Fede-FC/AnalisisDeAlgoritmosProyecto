@@ -3,9 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package algoritmos;
-import java.util.*;
+import conceptos.Pieza;
 import conceptos.Puzzle;
 import conceptos.PuzzleFactory;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author: 
@@ -14,10 +16,36 @@ import conceptos.PuzzleFactory;
  */
 public class Main {
     
-    public Puzzle desordenarPuzzle(Puzzle rompCabezas){
+    public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
+        ArrayList<Pieza> lista = new ArrayList<>();
+        int tamano= rompCabezas.getSize();
+        int indice=0;
         
-        return null;
+        //Basicamente crre una lista de piezas, esto lo hago por que hay una
+        //funcion que desordena las lista automaticamente
+        for (int i=0; i<tamano; i++ ){
+            for (int j=0; j<tamano; j++ ){
+                Pieza pieza= rompCabezas.getPieza(i, j);
+                if (pieza!=null){
+                    lista.add(pieza);
+                }
+            }
+        }
         
+        //Ahora se desordena la lista
+        Collections.shuffle(lista);
+        
+        //
+        //
+        for (int i=0; i<tamano; i++ ){
+            for (int j=0; j<tamano; j++ ){
+                rompCabezas.colocarPieza(i, j, lista.get(indice++));
+                
+            }
+        }
+        
+
+        return rompCabezas;
     }
     
     public static void main(String[] args) {
@@ -25,9 +53,9 @@ public class Main {
         puzzle.print();
         puzzle = PuzzleFactory.createRandom(3, 5);
         puzzle.print();
-        Collections.shuffle((List<?>) puzzle);
-        puzzle.print();
-        
+        System.out.println("---------------------------");
+        Puzzle desordenarpuzzle = desordenarPuzzle(puzzle);
+        desordenarpuzzle.print();
     }
 
 }

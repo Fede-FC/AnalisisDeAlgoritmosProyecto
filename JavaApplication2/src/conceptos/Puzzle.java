@@ -63,4 +63,13 @@ public class Puzzle {
         System.out.println();
     }
 }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+    
 }
