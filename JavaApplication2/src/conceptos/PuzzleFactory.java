@@ -38,7 +38,7 @@ public class PuzzleFactory {
 
                 if (puzzle.isValid(i, j, pieza))
                     puzzle.colocarPieza(i, j, pieza);
-                    
+
                     piezas.add(pieza);
                     
             }
@@ -51,7 +51,7 @@ public class PuzzleFactory {
         ArrayList<Pieza> lista = new ArrayList<>();
         int tamano= rompCabezas.getSize();
         int indice=0;
-        
+
         //Basicamente crre una lista de piezas, esto lo hago por que hay un
         //metodo que desordena las lista automaticamente
         for (int i=0; i<tamano; i++ ){

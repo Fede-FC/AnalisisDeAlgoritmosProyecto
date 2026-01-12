@@ -14,10 +14,14 @@ import conceptos.Puzzle;
 public class porFuerza {
     Puzzle puzzle;
 
-    public porFuerza(Puzzle puzzle) {
+    public porFuerza() {
+    }
+    
+    public void resolver(Puzzle puzzle) {
         this.puzzle = puzzle;
         this.solve(0);
     }
+    
     boolean solve(int pos){
         if (pos == this.puzzle.getSize()*this.puzzle.getSize())
             return true;

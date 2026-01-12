@@ -18,7 +18,7 @@ public class Puzzle {
     public Puzzle(int size) {
         this.size = size;
         this.tablero = new Pieza[size][size];
-        this.used = new boolean[size];
+        this.used = new boolean[size*size];
     }
     public void definirUsed(int pos, boolean valor){
         this.used[pos] = valor;
