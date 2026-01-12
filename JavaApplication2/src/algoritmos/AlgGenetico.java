@@ -13,7 +13,8 @@ import java.util.ArrayList;
  * @author araya
  */
 public class AlgGenetico {
-    static int limNumerico= 9;
+    public static int limNumerico= 9;
+    
     public static void algGenetico(Puzzle rompCabezas){
         //De locos
         int poblacionInicial = 30;
@@ -26,6 +27,7 @@ public class AlgGenetico {
             Puzzle puzzle = new Puzzle(rompCabezas.getSize());
             puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), limNumerico);
             puzzle= PuzzleFactory.desordenarPuzzle(puzzle);
+            puzzle.print();
             puzzleList.add(puzzle);
         }
         
@@ -52,6 +54,7 @@ public class AlgGenetico {
         Puzzle puzzle = new Puzzle(7);
         puzzle = PuzzleFactory.createRandom(7, 9);
         puzzle.print();
+        System.out.println("------------------");
         algGenetico(puzzle);
         
     }

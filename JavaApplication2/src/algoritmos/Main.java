@@ -12,7 +12,7 @@ import conceptos.PuzzleFactory;
  * 
  */
 public class Main {
-    
+    static int limNumerico= 9;
    
     
     public static void main(String[] args) {
