@@ -27,12 +27,9 @@ public class AlgGenetico {
             puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), limNumerico);
             puzzle= PuzzleFactory.desordenarPuzzle(puzzle);
             puzzleList.add(puzzle);
-            puzzle.print();
-            System.out.println("-----------------------------");
         }
-        int cantGeneraciones=0;
         
-        while (cantGeneraciones<10){
+        for (int i = 0; i < 10; i++) {
             
             
             
@@ -44,7 +41,6 @@ public class AlgGenetico {
             
             
             
-            cantGeneraciones++;
         }
          
         return;
