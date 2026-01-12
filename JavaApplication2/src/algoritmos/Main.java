@@ -3,11 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package algoritmos;
-import conceptos.Pieza;
 import conceptos.Puzzle;
 import conceptos.PuzzleFactory;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * @author: 
@@ -26,6 +23,11 @@ public class Main {
         System.out.println("---------------------------");
         puzzle = PuzzleFactory.desordenarPuzzle(puzzle);
         puzzle.print();
+        System.out.println("---------------------------");
+        porFuerza SolverFuerza = new porFuerza(puzzle);
+        puzzle.print();
+
+        
     }
 
 }

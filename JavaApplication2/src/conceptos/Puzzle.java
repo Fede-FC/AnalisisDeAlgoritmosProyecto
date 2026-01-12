@@ -4,6 +4,8 @@
  */
 package conceptos;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author feder
@@ -11,12 +13,17 @@ package conceptos;
 public class Puzzle {
     int size;
     Pieza[][] tablero;
-
+    ArrayList<Pieza> Piezas;
+    boolean[] used;
     public Puzzle(int size) {
         this.size = size;
         this.tablero = new Pieza[size][size];
-        
+        this.used = new boolean[size];
     }
+    public void definirUsed(int pos, boolean valor){
+        this.used[pos] = valor;
+    }
+    public boolean conocerUsed(int pos){return this.used[pos];}
     
     public void colocarPieza(int row, int col, Pieza pieza){
         this.tablero[row][col] = pieza;
@@ -63,17 +70,28 @@ public class Puzzle {
         System.out.println();
         }
     }
+    public int howGood(){
+        int count=0;
+        if (this.used == null) return count;
+        for (int i = 0; i < this.used.length; i++){
+            if (used[i])
+                count++;
+        }
+        return count;
+    }
+    public boolean[] getUsed() { return used;  }
+
+    public void setUsed(boolean[] used) { this.used = used;  }
+
+    public ArrayList<Pieza> getPiezas() {  return Piezas; }
+
+    public void setPiezas(ArrayList<Pieza> Piezas) {   this.Piezas = Piezas;  }
 
     public int getRow(int posicion){ return posicion / this.size; }
     
     public int getCol(int posicion){  return posicion % this.size;  }
     
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
+    public int getSize() {  return size;}
+    public void setSize(int size) { this.size = size;  }
     
 }

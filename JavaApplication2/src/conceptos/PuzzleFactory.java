@@ -38,10 +38,12 @@ public class PuzzleFactory {
 
                 if (puzzle.isValid(i, j, pieza))
                     puzzle.colocarPieza(i, j, pieza);
+                    
                     piezas.add(pieza);
+                    
             }
         }
-        
+        puzzle.setPiezas(piezas);
         
         return puzzle;
     }
