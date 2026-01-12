@@ -16,7 +16,7 @@ import java.util.Collections;
  */
 public class Main {
     
-    public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
+    public static void desordenarPuzzle(Puzzle rompCabezas){
         ArrayList<Pieza> lista = new ArrayList<>();
         int tamano= rompCabezas.getSize();
         int indice=0;
@@ -37,7 +37,8 @@ public class Main {
         Collections.shuffle(lista);
         
         //Aqui se cambia los valores de las piezas de rompCabezas por los de 
-        //lista(son los mismos en distinto orden)
+        //lista(son los mismos en distinto orden), por lo que ahora si se puede
+        //usar con los algoritmos
         for (int i=0; i<tamano; i++ ){
             for (int j=0; j<tamano; j++ ){
                 rompCabezas.colocarPieza(i, j, lista.get(indice++));
@@ -46,7 +47,7 @@ public class Main {
         }
         
         //se devuelve la lista desordenada
-        return rompCabezas;
+        return ;
     }
     
     public static void main(String[] args) {
@@ -55,8 +56,8 @@ public class Main {
         puzzle = PuzzleFactory.createRandom(3, 5);
         puzzle.print();
         System.out.println("---------------------------");
-        Puzzle desordenarpuzzle = desordenarPuzzle(puzzle);
-        desordenarpuzzle.print();
+        desordenarPuzzle(puzzle);
+        puzzle.print();
     }
 
 }
