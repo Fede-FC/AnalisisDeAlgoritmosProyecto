@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package algoritmos;
-
 import conceptos.Puzzle;
 import conceptos.PuzzleFactory;
 import java.util.ArrayList;
@@ -13,9 +12,15 @@ import java.util.ArrayList;
  * @author araya
  */
 public class AlgGenetico {
-    public static int limNumerico= 9;
+    ArrayList<Puzzle> puzzlelist;
     
-    public static void algGenetico(Puzzle rompCabezas){
+
+    public AlgGenetico(Puzzle rompCabezas) {
+        this.rompCabezas = rompCabezas;
+    }
+    
+    
+    public static void algGenetico(rompCabezas, int limNumerico){
         //De locos
         int poblacionInicial = 30;
         if (rompCabezas.getSize()<30){
@@ -27,12 +32,11 @@ public class AlgGenetico {
             Puzzle puzzle = new Puzzle(rompCabezas.getSize());
             puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), limNumerico);
             puzzle= PuzzleFactory.desordenarPuzzle(puzzle);
-            puzzle.print();
             puzzleList.add(puzzle);
         }
         
         for (int i = 0; i < 10; i++) {
-            
+            //Generaciones aqui......
             
             
             
@@ -54,8 +58,7 @@ public class AlgGenetico {
         Puzzle puzzle = new Puzzle(7);
         puzzle = PuzzleFactory.createRandom(7, 9);
         puzzle.print();
-        System.out.println("------------------");
-        algGenetico(puzzle);
+        algGenetico(puzzle, 9);
         
     }
 }
