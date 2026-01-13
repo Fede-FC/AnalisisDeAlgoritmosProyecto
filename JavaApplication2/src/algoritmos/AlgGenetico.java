@@ -13,27 +13,15 @@ import java.util.ArrayList;
  */
 public class AlgGenetico {
     ArrayList<Puzzle> puzzlelist;
-    
+    static int tamano;
 
-    public AlgGenetico(Puzzle rompCabezas) {
-        this.rompCabezas = rompCabezas;
+    public AlgGenetico(ArrayList<Puzzle> puzzlelist) {
+        this.puzzlelist = puzzlelist;
+        this.tamano = puzzlelist.get(0).getSize();
     }
     
-    
-    public static void algGenetico(rompCabezas, int limNumerico){
-        //De locos
-        int poblacionInicial = 30;
-        if (rompCabezas.getSize()<30){
-            poblacionInicial=rompCabezas.getSize();
-        } 
+    public static void algGenetico(){
         
-        ArrayList<Puzzle> puzzleList= new ArrayList<>();
-        for (int individuos = 0; individuos < poblacionInicial; individuos++) {
-            Puzzle puzzle = new Puzzle(rompCabezas.getSize());
-            puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), limNumerico);
-            puzzle= PuzzleFactory.desordenarPuzzle(puzzle);
-            puzzleList.add(puzzle);
-        }
         
         for (int i = 0; i < 10; i++) {
             //Generaciones aqui......
@@ -55,10 +43,27 @@ public class AlgGenetico {
     
     
     public static void main(String[] args) {
-        Puzzle puzzle = new Puzzle(7);
-        puzzle = PuzzleFactory.createRandom(7, 9);
-        puzzle.print();
-        algGenetico(puzzle, 9);
+        Puzzle rompCabezas = new Puzzle(7);
+        ArrayList<Puzzle> puzzleList= new ArrayList<>();
+        rompCabezas = PuzzleFactory.createRandom(7, 9);
+        rompCabezas.print();
+        //De locos
+        int poblacionInicial = 30;
+        if (rompCabezas.getSize()<30){
+            poblacionInicial=rompCabezas.getSize();
+        } 
+        System.out.println("1-----------------------------------1");
+        puzzleList.add(rompCabezas);
+        System.out.println("1-----------------------------------1");
+        puzzleList.get(0).print();
+        for (int individuos = 0; individuos < poblacionInicial-1; individuos++) {
+            Puzzle puzzle = new Puzzle(rompCabezas.getSize());
+            puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), 9);
+            puzzle= PuzzleFactory.desordenarPuzzle(puzzle);
+            puzzleList.add(puzzle);
+            puzzle.print();
+            System.out.println("1-----------------------------------1");
+        }
         
     }
 }
