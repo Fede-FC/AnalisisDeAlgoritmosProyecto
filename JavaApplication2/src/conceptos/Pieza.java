@@ -82,7 +82,7 @@ public class Pieza {
     
     @Override
     public String toString(){
-        return String.valueOf(this.top) + String.valueOf(this.right)+ String.valueOf(this.bottom) + String.valueOf(this.left);
+        return String.valueOf(this.top)+"-" + String.valueOf(this.right)+"-"+String.valueOf(this.bottom)+"-"+ String.valueOf(this.left);
     }
     
 }
