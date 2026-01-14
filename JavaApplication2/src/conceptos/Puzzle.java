@@ -79,6 +79,12 @@ public class Puzzle {
         }
         return count;
     }
+    //Esta funcion devuelve la cantidad de piezas que coinciden entre si
+    //Es decir, si algun lado coincide sin importar su posicion
+    //EN PROCESO, tal vez mañana, ahorita a dormir.
+    public int calcularFitness(){
+        return 0;
+    }
     public boolean[] getUsed() { return used;  }
 
     public void setUsed(boolean[] used) { this.used = used;  }

@@ -22,9 +22,9 @@ public class AlgGenetico {
     
     public static void algGenetico(){
         
-        
+        //Cada ciclo representa una generacion
         for (int i = 0; i < 10; i++) {
-            //Generaciones aqui......
+            
             
             
             
@@ -54,8 +54,7 @@ public class AlgGenetico {
         } 
         System.out.println("1-----------------------------------1");
         puzzleList.add(rompCabezas);
-        System.out.println("1-----------------------------------1");
-        puzzleList.get(0).print();
+      
         for (int individuos = 0; individuos < poblacionInicial-1; individuos++) {
             Puzzle puzzle = new Puzzle(rompCabezas.getSize());
             puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), 9);
