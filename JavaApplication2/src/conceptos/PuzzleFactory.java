@@ -52,7 +52,7 @@ public class PuzzleFactory {
         int tamano= rompCabezas.getSize();
         int indice=0;
 
-        //Basicamente crre una lista de piezas, esto lo hago por que hay un
+        //Basicamente cree una lista de piezas, esto lo hago por que hay un
         //metodo que desordena las lista automaticamente
         for (int i=0; i<tamano; i++ ){
             for (int j=0; j<tamano; j++ ){

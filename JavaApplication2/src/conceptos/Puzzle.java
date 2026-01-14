@@ -81,9 +81,22 @@ public class Puzzle {
     }
     //Esta funcion devuelve la cantidad de piezas que coinciden entre si
     //Es decir, si algun lado coincide sin importar su posicion
-    //EN PROCESO, tal vez mañana, ahorita a dormir.
-    public int calcularFitness(){
-        return 0;
+    public int evaluateFitness(){
+        int coincidencias = 0;
+        
+        
+        for (int row = 0; row < size; row++) {
+            for (int column = 0; column < size; column++) {
+                if (row<size-1){
+                    if (tablero[row][column].getBottom()== tablero[row+1][column].getTop()) coincidencias++;
+                }
+                if (column<size-1){
+                    if (tablero[row][column].getRight()== tablero[row][column+1].getLeft()) coincidencias++;
+                } 
+            }
+            
+        }
+        return coincidencias;
     }
     public boolean[] getUsed() { return used;  }
 
