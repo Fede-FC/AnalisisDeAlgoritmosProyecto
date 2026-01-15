@@ -104,8 +104,13 @@ public class Puzzle {
 
     public ArrayList<Pieza> getPiezas() {  return Piezas; }
 
-    public void setPiezas(ArrayList<Pieza> Piezas) {   this.Piezas = Piezas;  }
-
+    public void setPiezas(ArrayList<Pieza> Piezas) {   this.Piezas = Piezas; 
+    for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                this.colocarPieza(i, j, this.Piezas.get(i+j));
+            }
+        }
+    }
     public int getRow(int posicion){ return posicion / this.size; }
     
     public int getCol(int posicion){  return posicion % this.size;  }
