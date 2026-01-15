@@ -16,6 +16,7 @@ public class AlgGenetico {
     private ArrayList<Puzzle> puzzleList;
     private int tamano;
     private int poblacionInicial=30;
+    private ArrayList<Puzzle> hijos;
 
     public AlgGenetico(ArrayList<Puzzle> puzzlelist) {
         this.puzzleList = puzzlelist;
@@ -27,27 +28,56 @@ public class AlgGenetico {
         } 
     }
     
-    public void resolver(){
+    
+    public ArrayList<Puzzle> cruce(ArrayList<Puzzle> ancestros){
+        int tomados[][]=new int[tamano][tamano];
+        int i=0;
         
-        //Cada ciclo representa una generacion
+        while (i < 2*poblacionInicial) {
+            Puzzle rompCabezas= new Puzzle(tamano);
+            
+            
+            
+            
+            
+            
+            i++;
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        return hijos;
+    }
+    
+    
+    public void resolver(){
+        ArrayList<Puzzle> hijos;
         for (int generation = 0; generation < 10; generation++) {
+            //Ordenar
             Collections.sort(puzzleList, (a,b) -> b.evaluateFitness() - a.evaluateFitness());
-            if (puzzleList.size()>poblacionInicial) 
-                puzzleList.subList(poblacionInicial, puzzleList.size()).clear();
+            //Hijos=2*Poblacion inicial - BUA DE LOCOS
+            
+            //cruce
+            this.hijos = cruce(puzzleList);
+            
+            
+            
+            
+            //Eliminar los de menos rendimiento
+            puzzleList.subList(poblacionInicial, puzzleList.size()).clear();
+            
+            
+            
 
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
         }
          
-        return;
+        return ;
         
     }
     
