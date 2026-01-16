@@ -16,7 +16,28 @@ public class PuzzleFactory {
     ArrayList<Pieza> Piezas;
     int pieceIdCcounter;
     public static Puzzle createFixed3x3(){
-        return null;
+        int pieceIdCounter = 0;
+        Puzzle puzzle = new Puzzle(3);
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        
+        //Piezzas del rompecabezas predeterminado
+        // Formato: (top, right, bottom, left)
+        
+        piezas.add(new Pieza (2, 3, 3, 0, 0));
+        piezas.add(new Pieza (0, 4, 9, 3, 1));
+        piezas.add(new Pieza (0, 0, 4, 4, 2));
+
+        piezas.add(new Pieza (3, 9, 7, 0, 3));
+        piezas.add(new Pieza (9, 7, 8, 9, 4));
+        piezas.add(new Pieza (4, 0, 9, 7, 5));
+
+        piezas.add(new Pieza (7, 8, 0, 0, 6));
+        piezas.add(new Pieza (8,4, 8, 8, 7));
+        piezas.add(new Pieza (9, 0, 0, 4, 8));
+        
+        puzzle.setPiezas(piezas);
+        
+        return puzzle;
     }
     public static Puzzle createRandom(int size, int maxValue){
         int pieceIdCounter = 0;
@@ -52,7 +73,7 @@ public class PuzzleFactory {
         int tamano= rompCabezas.getSize();
         int indice=0;
 
-        //Basicamente crre una lista de piezas, esto lo hago por que hay un
+        //Basicamente cree una lista de piezas, esto lo hago por que hay un
         //metodo que desordena las lista automaticamente
         for (int i=0; i<tamano; i++ ){
             for (int j=0; j<tamano; j++ ){

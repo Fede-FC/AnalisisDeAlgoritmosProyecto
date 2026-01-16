@@ -79,14 +79,38 @@ public class Puzzle {
         }
         return count;
     }
+    //Esta funcion devuelve la cantidad de piezas que coinciden entre si
+    //Es decir, si algun lado coincide sin importar su posicion
+    public int evaluateFitness(){
+        int coincidencias = 0;
+        
+        
+        for (int row = 0; row < size; row++) {
+            for (int column = 0; column < size; column++) {
+                if (row<size-1){
+                    if (tablero[row][column].getBottom()== tablero[row+1][column].getTop()) coincidencias++;
+                }
+                if (column<size-1){
+                    if (tablero[row][column].getRight()== tablero[row][column+1].getLeft()) coincidencias++;
+                } 
+            }
+            
+        }
+        return coincidencias;
+    }
     public boolean[] getUsed() { return used;  }
 
     public void setUsed(boolean[] used) { this.used = used;  }
 
     public ArrayList<Pieza> getPiezas() {  return Piezas; }
 
-    public void setPiezas(ArrayList<Pieza> Piezas) {   this.Piezas = Piezas;  }
-
+    public void setPiezas(ArrayList<Pieza> Piezas) {   this.Piezas = Piezas; 
+    for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                this.colocarPieza(i, j, this.Piezas.get(i+j));
+            }
+        }
+    }
     public int getRow(int posicion){ return posicion / this.size; }
     
     public int getCol(int posicion){  return posicion % this.size;  }
