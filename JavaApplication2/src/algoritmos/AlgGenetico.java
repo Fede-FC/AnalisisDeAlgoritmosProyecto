@@ -7,6 +7,7 @@ import conceptos.Puzzle;
 import conceptos.PuzzleFactory;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  *
@@ -21,7 +22,7 @@ public class AlgGenetico {
     public AlgGenetico(ArrayList<Puzzle> puzzlelist) {
         this.puzzleList = puzzlelist;
         this.tamano = puzzlelist.get(0).getSize();
-        
+        this.hijos= new ArrayList<>();
         
         if (puzzlelist.get(0).getSize()<30){
             poblacionInicial=puzzlelist.get(0).getSize();
@@ -30,30 +31,43 @@ public class AlgGenetico {
     
     
     public ArrayList<Puzzle> cruce(ArrayList<Puzzle> ancestros){
-        int tomados[][]=new int[tamano][tamano];
-        int i=0;
+        Random random = new Random();
+        //int aleatorio = random.nextInt(this.tamano);
         
-        while (i < 2*poblacionInicial) {
-            Puzzle rompCabezas= new Puzzle(tamano);
+        
+        
+        
+        while (hijos.size() < 2*poblacionInicial) {
+            Puzzle padre= ancestros.get(random.nextInt(this.tamano));
+            Puzzle madre= ancestros.get(random.nextInt(this.tamano));
             
+            if (padre==madre) continue;
             
-            
-            
-            
-            
-            i++;
+            Puzzle pHijo =cruzarFilas(padre, madre);
+            hijos.add(pHijo);
+            pHijo =cruzarFilas(madre, padre);
+            hijos.add(pHijo);
         }
-        
-        
-        
-        
-        
-        
-        
         
         
         return hijos;
     }
+    
+    public Puzzle cruzarFilas(Puzzle padre, Puzzle madre) {
+    Puzzle hijo = new Puzzle(tamano);
+
+    for (int i = 0; i < tamano; i++) {
+        for (int j = 0; j < tamano; j++) {
+            if (i % 2 == 0) {
+                hijo.colocarPieza(i, j, padre.getPieza(i, j));
+            } else {
+                hijo.colocarPieza(i, j, madre.getPieza(i, j));
+            }
+        }
+    }
+    return hijo;
+}
+
     
     
     public void resolver(){
@@ -66,6 +80,7 @@ public class AlgGenetico {
             //cruce
             this.hijos = cruce(puzzleList);
             
+            //
             
             
             
