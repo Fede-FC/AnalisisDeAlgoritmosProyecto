@@ -6,6 +6,7 @@ package conceptos;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -42,6 +43,8 @@ public class PuzzleFactory {
     public static Puzzle createRandom(int size, int maxValue){
         int pieceIdCounter = 0;
         Random generador = new Random();
+        HashSet<String> firmas = new HashSet<>();
+        String firma;
         ArrayList<Pieza> piezas = new ArrayList<>();
         Puzzle puzzle = new Puzzle(size);
         // recorrer fila poer fila e ir generando piezas
@@ -49,19 +52,19 @@ public class PuzzleFactory {
             for (int j = 0; j < size; j++){
                 Pieza pieza = new Pieza();
                 pieza.setId(pieceIdCounter);
+                do{    
+                    // Derecha y abajo son aleatorias
+                    pieza.setRight(generador.nextInt(maxValue+1));
+                    pieza.setBottom(generador.nextInt(maxValue+1));
+                    // arriba e izquierda son aleatorias si son bordes si no toma la de la pieza adyacente
+                    pieza.setTop( i!= 0 ? puzzle.getPieza(i-1, j).getBottom() : generador.nextInt(maxValue+1) );
+                    pieza.setLeft( j!= 0 ? puzzle.getPieza(i, j-1).getRight() : generador.nextInt(maxValue+1) );
+                    // creando firma para asegurar originalidad 
+                    firma = pieza.getTop()+"-"+pieza.getRight()+"-"+pieza.getBottom()+"-"+pieza.getLeft();
+                } while(firmas.contains(firma));
                 pieceIdCounter++;
-                // Derecha y abajo son aleatorias
-                pieza.setRight(generador.nextInt(maxValue+1));
-                pieza.setBottom(generador.nextInt(maxValue+1));
-                // arriba e izquierda son aleatorias si son bordes si no toma la de la pieza adyacente
-                pieza.setTop( i!= 0 ? puzzle.getPieza(i-1, j).getBottom() : generador.nextInt(maxValue+1) );
-                pieza.setLeft( j!= 0 ? puzzle.getPieza(i, j-1).getRight() : generador.nextInt(maxValue+1) );
-
-                if (puzzle.isValid(i, j, pieza))
-                    puzzle.colocarPieza(i, j, pieza);
-
-                    piezas.add(pieza);
-                    
+                puzzle.colocarPieza(i, j, pieza);
+                piezas.add(pieza);
             }
         }
         puzzle.setPiezas(piezas);
