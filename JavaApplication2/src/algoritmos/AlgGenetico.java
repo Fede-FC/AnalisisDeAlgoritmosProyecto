@@ -80,14 +80,16 @@ public class AlgGenetico {
             //cruce
             this.hijos = cruce(puzzleList);
             
-            //
+            //Añadir hijos a la poblacion- TODO: analizar proximamente(Probablemente cambiar)
+            puzzleList.addAll(this.hijos);
             
+            //Se re-evalua y acomoda de nuevo TODO: verificar luego si no hace falta ordenar 2 veces
+            Collections.sort(puzzleList, (a,b) -> b.evaluateFitness() - a.evaluateFitness());
             
-            
-            //Eliminar los de menos rendimiento
+            //Eliminar los de menos rendimiento, ya sea padres o hijos - (Parte completa)
             puzzleList.subList(poblacionInicial, puzzleList.size()).clear();
             
-            
+            //Falta metodo mutar
             
 
         }
@@ -107,15 +109,22 @@ public class AlgGenetico {
         if (rompCabezas.getSize()<30){
             poblacionInicial=rompCabezas.getSize();
         } 
+        
+        
         System.out.println("1-----------------------------------1");
         puzzleList.add(rompCabezas);
         Puzzle puzzle = new Puzzle(rompCabezas.getSize());
+        puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), 9);
+        puzzle.print();
+        System.out.println("1-----------------------------------1");
+        System.out.println("1-----------------------------------1");
+        System.out.println("1-----------------------------------1");
         for (int individuos = 0; individuos < poblacionInicial-1; individuos++) {
-            puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), 9);
-            puzzle= PuzzleFactory.desordenarPuzzle(puzzle);
-            puzzleList.add(puzzle);
-            puzzle.print();
-            System.out.println(puzzle.evaluateFitness());
+            Puzzle nuevo = PuzzleFactory.copiarPuzzle(puzzle);
+            nuevo = PuzzleFactory.desordenarPuzzle(puzzle);
+            puzzleList.add(nuevo);
+            nuevo.print();
+            System.out.println(nuevo.evaluateFitness());
             System.out.println("1-----------------------------------1");
         }
     }
