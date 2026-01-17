@@ -62,6 +62,7 @@ public class PuzzleFactory {
                     // creando firma para asegurar originalidad 
                     firma = pieza.getTop()+"-"+pieza.getRight()+"-"+pieza.getBottom()+"-"+pieza.getLeft();
                 } while(firmas.contains(firma));
+                firmas.add(firma);
                 pieceIdCounter++;
                 puzzle.colocarPieza(i, j, pieza);
                 piezas.add(pieza);
@@ -71,16 +72,42 @@ public class PuzzleFactory {
         
         return puzzle;
     }
-     public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
+    public static Puzzle copiarPuzzle(Puzzle original){
+        Puzzle nuevo = new Puzzle(original.getSize());
+
+        for (int row = 0; row < original.getSize(); row++) {
+            for (int column = 0; column < original.getSize(); column++) {
+                Pieza piezaOriginal = original.getPieza(row, column);
+                Pieza piezaNueva = new Pieza(
+                    piezaOriginal.getTop(),
+                    piezaOriginal.getRight(),
+                    piezaOriginal.getBottom(),
+                    piezaOriginal.getLeft(),
+                    piezaOriginal.getId()
+                );
+                nuevo.colocarPieza(row, column, piezaNueva);
+            }
+        }
+
+        return nuevo;
+    }
+
+    public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
         ArrayList<Pieza> lista = new ArrayList<>();
         int tamano= rompCabezas.getSize();
         int indice=0;
 
         //Basicamente cree una lista de piezas, esto lo hago por que hay un
         //metodo que desordena las lista automaticamente
-        for (int i=0; i<tamano; i++ ){
-            for (int j=0; j<tamano; j++ ){
-                Pieza pieza= rompCabezas.getPieza(i, j);
+        for (int row=0; row<tamano; row++ ){
+            for (int column=0; column<tamano; column++ ){
+                Pieza original = rompCabezas.getPieza(row, column);
+                Pieza pieza= new Pieza(
+                        original.getTop(), 
+                        original.getRight(), 
+                        original.getBottom(), 
+                        original.getLeft(),
+                        original.getId());
                 if (pieza!=null){
                     lista.add(pieza);
                 }
@@ -94,9 +121,9 @@ public class PuzzleFactory {
         //Aqui se cambia los valores de las piezas de rompCabezas por los de 
         //lista(son los mismos en distinto orden), por lo que ahora si se puede
         //usar con los algoritmos
-        for (int i=0; i<tamano; i++ ){
-            for (int j=0; j<tamano; j++ ){
-                rompCabezas.colocarPieza(i, j, lista.get(indice++));
+        for (int row=0; row<tamano; row++ ){
+            for (int column=0; column<tamano; column++ ){
+                rompCabezas.colocarPieza(row, column, lista.get(indice++));
                 
             }
         }

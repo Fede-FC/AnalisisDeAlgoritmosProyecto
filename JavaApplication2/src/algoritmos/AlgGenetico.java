@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package algoritmos;
+import conceptos.Pieza;
 import conceptos.Puzzle;
 import conceptos.PuzzleFactory;
 import java.util.ArrayList;
@@ -55,13 +56,32 @@ public class AlgGenetico {
     
     public Puzzle cruzarFilas(Puzzle padre, Puzzle madre) {
     Puzzle hijo = new Puzzle(tamano);
-
+    
+    
     for (int i = 0; i < tamano; i++) {
         for (int j = 0; j < tamano; j++) {
             if (i % 2 == 0) {
-                hijo.colocarPieza(i, j, padre.getPieza(i, j));
+                Pieza pPadre= madre.getPieza(i, j);
+                
+                Pieza actualP = new Pieza(
+                    pPadre.getTop(), 
+                    pPadre.getRight(), 
+                    pPadre.getBottom(), 
+                    pPadre.getLeft(),
+                    pPadre.getId());
+                
+                hijo.colocarPieza(i, j, actualP);
             } else {
-                hijo.colocarPieza(i, j, madre.getPieza(i, j));
+                Pieza pMadre= madre.getPieza(i, j);
+                
+                Pieza actualM = new Pieza(
+                    pMadre.getTop(), 
+                    pMadre.getRight(), 
+                    pMadre.getBottom(), 
+                    pMadre.getLeft(),
+                    pMadre.getId());
+                
+                hijo.colocarPieza(i, j, actualM);
             }
         }
     }
@@ -102,7 +122,7 @@ public class AlgGenetico {
     public static void main(String[] args) {
         Puzzle rompCabezas = new Puzzle(4);
         ArrayList<Puzzle> puzzleList= new ArrayList<>();
-        rompCabezas = PuzzleFactory.createRandom(4, 9);
+        rompCabezas = PuzzleFactory.createRandom(5, 9);
         rompCabezas.print();
         //De locos
         int poblacionInicial = 30;
@@ -121,7 +141,7 @@ public class AlgGenetico {
         System.out.println("1-----------------------------------1");
         for (int individuos = 0; individuos < poblacionInicial-1; individuos++) {
             Puzzle nuevo = PuzzleFactory.copiarPuzzle(puzzle);
-            nuevo = PuzzleFactory.desordenarPuzzle(puzzle);
+            nuevo = PuzzleFactory.desordenarPuzzle(nuevo);
             puzzleList.add(nuevo);
             nuevo.print();
             System.out.println(nuevo.evaluateFitness());
