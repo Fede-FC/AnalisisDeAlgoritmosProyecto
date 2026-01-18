@@ -5,6 +5,7 @@
 package conceptos;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -61,13 +62,27 @@ public class Puzzle {
         }
         return true;
     }
-    
+    public void limpiarTablero(){
+        for (int i =0; i< size; i++){
+            for (int j = 0; j <size; j++){
+                tablero[i][j] = null;
+            }
+        }
+        Arrays.fill(used, false);
+    }
     public void print() {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             System.out.print(this.tablero[i][j] == null ? "---- " : this.tablero[i][j] + " ");
             }
         System.out.println();
+        }
+    }
+    public void printPiezas(){
+        int i;
+        for (Pieza pieza : this.Piezas){
+            System.out.print(pieza + " ");
+            
         }
     }
     public int howGood(){
