@@ -55,37 +55,37 @@ public class AlgGenetico {
     }
     
     public Puzzle cruzarFilas(Puzzle padre, Puzzle madre) {
-    Puzzle hijo = new Puzzle(tamano);
-    
-    
-    for (int i = 0; i < tamano; i++) {
-        for (int j = 0; j < tamano; j++) {
-            if (i % 2 == 0) {
-                Pieza pPadre= madre.getPieza(i, j);
-                
-                Pieza actualP = new Pieza(
-                    pPadre.getTop(), 
-                    pPadre.getRight(), 
-                    pPadre.getBottom(), 
-                    pPadre.getLeft(),
-                    pPadre.getId());
-                
-                hijo.colocarPieza(i, j, actualP);
-            } else {
-                Pieza pMadre= madre.getPieza(i, j);
-                
-                Pieza actualM = new Pieza(
-                    pMadre.getTop(), 
-                    pMadre.getRight(), 
-                    pMadre.getBottom(), 
-                    pMadre.getLeft(),
-                    pMadre.getId());
-                
-                hijo.colocarPieza(i, j, actualM);
+        Puzzle hijo = new Puzzle(tamano);
+
+
+        for (int i = 0; i < tamano; i++) {
+            for (int j = 0; j < tamano; j++) {
+                if (i % 2 == 0) {
+                    Pieza pPadre= padre.getPieza(i, j);
+
+                    Pieza actualP = new Pieza(
+                        pPadre.getTop(), 
+                        pPadre.getRight(), 
+                        pPadre.getBottom(), 
+                        pPadre.getLeft(),
+                        pPadre.getId());
+
+                    hijo.colocarPieza(i, j, actualP);
+                } else {
+                    Pieza pMadre= madre.getPieza(i, j);
+
+                    Pieza actualM = new Pieza(
+                        pMadre.getTop(), 
+                        pMadre.getRight(), 
+                        pMadre.getBottom(), 
+                        pMadre.getLeft(),
+                        pMadre.getId());
+
+                    hijo.colocarPieza(i, j, actualM);
+                }
             }
         }
-    }
-    return hijo;
+        return hijo;
 }
 
     
