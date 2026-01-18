@@ -41,7 +41,46 @@ public class PuzzleFactory {
         return puzzle;
     }
     public static Puzzle createRandom(int size, int maxValue){
-        Random rand = new Random();
+        int pieceIdCounter = 0;
+        Random generador = new Random();
+        HashSet <String> firmas = new HashSet<>();
+        String firma;
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        Puzzle puzzle = new Puzzle(size);
+        // recorrer fila poer fila e ir generando piezas
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                Pieza pieza = new Pieza();
+                pieza.setId(pieceIdCounter);
+                do{
+                    // Derecha y abajo son aleatorias
+                    pieza.setRight(generador.nextInt(maxValue+1));
+                    pieza.setBottom(generador.nextInt(maxValue+1));
+                    
+                    // arriba e izquierda son aleatorias si son bordes si no toma la de la pieza adyacente
+                    pieza.setTop( i!= 0 ? piezas.get((i-1)*size+j).getBottom() : generador.nextInt(maxValue+1) );
+                    pieza.setLeft( j!= 0 ? piezas.get(i*size+j-1).getRight() : generador.nextInt(maxValue+1) );
+                    // creando firma para asegurar originalidad
+                    firma = pieza.getTop()+"-"+pieza.getRight()+"-"+pieza.getBottom()+"-"+pieza.getLeft();
+                    } while(firmas.contains(firma));
+                firmas.add(firma); 
+
+                pieceIdCounter++; 
+
+                piezas.add(pieza);
+                
+            }
+
+        }
+        
+
+        puzzle.setPiezas(piezas); 
+        
+        puzzle.piezasToTablero();
+        return puzzle; 
+    }
+            
+        /*Random rand = new Random();
         
         int[][] horizontal  = new int[size][size + 1];
         int[][] vertical = new int[size+1][size];
@@ -77,7 +116,7 @@ public class PuzzleFactory {
         }
         puzzle.setPiezas(piezas);
         return puzzle;
-    }
+    }*/
     public static Puzzle copiarPuzzle(Puzzle original){
         Puzzle nuevo = new Puzzle(original.getSize());
 
