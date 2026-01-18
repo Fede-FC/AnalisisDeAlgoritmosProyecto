@@ -24,52 +24,58 @@ public class PuzzleFactory {
         //Piezzas del rompecabezas predeterminado
         // Formato: (top, right, bottom, left)
         
-        piezas.add(new Pieza (2, 3, 3, 0, 0));
-        piezas.add(new Pieza (0, 4, 9, 3, 1));
-        piezas.add(new Pieza (0, 0, 4, 4, 2));
+        piezas.add(new Pieza (0, 1, 4, 0, 0));
+        piezas.add(new Pieza (0, 2, 5, 1, 1));
+        piezas.add(new Pieza (0, 0, 6, 2, 2));
 
-        piezas.add(new Pieza (3, 9, 7, 0, 3));
-        piezas.add(new Pieza (9, 7, 8, 9, 4));
-        piezas.add(new Pieza (4, 0, 9, 7, 5));
+        piezas.add(new Pieza (4, 3, 7, 0, 3));
+        piezas.add(new Pieza (5, 8, 9, 3, 4));
+        piezas.add(new Pieza (6, 0, 1, 8, 5));
 
-        piezas.add(new Pieza (7, 8, 0, 0, 6));
-        piezas.add(new Pieza (8,4, 8, 8, 7));
-        piezas.add(new Pieza (9, 0, 0, 4, 8));
+        piezas.add(new Pieza (7, 4, 0, 0, 6));
+        piezas.add(new Pieza (9, 6, 0, 4, 7));
+        piezas.add(new Pieza (1, 0, 0, 6, 8));
         
         puzzle.setPiezas(piezas);
         
         return puzzle;
     }
     public static Puzzle createRandom(int size, int maxValue){
-        int pieceIdCounter = 0;
-        Random generador = new Random();
-        HashSet<String> firmas = new HashSet<>();
-        String firma;
-        ArrayList<Pieza> piezas = new ArrayList<>();
+        Random rand = new Random();
+        
+        int[][] horizontal  = new int[size][size + 1];
+        int[][] vertical = new int[size+1][size];
+        
+        // Rellenar bordes horizontales 
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j <= size; j++){
+                horizontal[i][j] = rand.nextInt(maxValue + 1);
+            }
+        }
+        for (int i = 0; i <= size; i++){
+            for (int j = 0; j < size; j++){
+                vertical[i][j] = rand.nextInt(maxValue + 1);
+            }
+        }
         Puzzle puzzle = new Puzzle(size);
-        // recorrer fila poer fila e ir generando piezas
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        int id = 0;
+        
         for (int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
-                Pieza pieza = new Pieza();
-                pieza.setId(pieceIdCounter);
-                do{    
-                    // Derecha y abajo son aleatorias
-                    pieza.setRight(generador.nextInt(maxValue+1));
-                    pieza.setBottom(generador.nextInt(maxValue+1));
-                    // arriba e izquierda son aleatorias si son bordes si no toma la de la pieza adyacente
-                    pieza.setTop( i!= 0 ? puzzle.getPieza(i-1, j).getBottom() : generador.nextInt(maxValue+1) );
-                    pieza.setLeft( j!= 0 ? puzzle.getPieza(i, j-1).getRight() : generador.nextInt(maxValue+1) );
-                    // creando firma para asegurar originalidad 
-                    firma = pieza.getTop()+"-"+pieza.getRight()+"-"+pieza.getBottom()+"-"+pieza.getLeft();
-                } while(firmas.contains(firma));
-                firmas.add(firma);
-                pieceIdCounter++;
-                puzzle.colocarPieza(i, j, pieza);
-                piezas.add(pieza);
+                Pieza p = new Pieza();
+                p.setId(id++);
+                // rellenando los bordes de la pieza con los numeros generados anteriormente
+                p.setTop(vertical[i][j]);
+                p.setBottom(vertical[i+1][j]);
+                p.setLeft(horizontal[i][j]);
+                p.setRight(horizontal[i][j+1]);
+                
+                puzzle.colocarPieza(j, j, p);
+                piezas.add(p);
             }
         }
         puzzle.setPiezas(piezas);
-        
         return puzzle;
     }
     public static Puzzle copiarPuzzle(Puzzle original){
@@ -92,7 +98,9 @@ public class PuzzleFactory {
         return nuevo;
     }
 
-    public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
+    public static void desordenarPuzzle(Puzzle rompCabezas){
+        Collections.shuffle(rompCabezas.getPiezas());
+        /*
         ArrayList<Pieza> lista = new ArrayList<>();
         int tamano= rompCabezas.getSize();
         int indice=0;
@@ -130,5 +138,6 @@ public class PuzzleFactory {
         
         //se devuelve la lista desordenada
         return rompCabezas;
+        */
     }
 }
