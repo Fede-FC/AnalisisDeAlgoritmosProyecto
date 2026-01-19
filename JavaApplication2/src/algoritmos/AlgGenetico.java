@@ -122,7 +122,7 @@ public class AlgGenetico {
     public static void main(String[] args) {
         Puzzle rompCabezas = new Puzzle(4);
         ArrayList<Puzzle> puzzleList= new ArrayList<>();
-        rompCabezas = PuzzleFactory.createRandom(5, 9);
+        rompCabezas = PuzzleFactory.createRandom(4, 9);
         rompCabezas.print();
         //De locos
         int poblacionInicial = 30;
@@ -141,7 +141,6 @@ public class AlgGenetico {
         System.out.println("1-----------------------------------1");
         for (int individuos = 0; individuos < poblacionInicial-1; individuos++) {
             Puzzle nuevo = PuzzleFactory.copiarPuzzle(puzzle);
-            nuevo = PuzzleFactory.desordenarPuzzle(nuevo);
             puzzleList.add(nuevo);
             nuevo.print();
             System.out.println(nuevo.evaluateFitness());
