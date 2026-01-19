@@ -73,16 +73,22 @@ public class Puzzle {
     public void print() {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            System.out.print(this.tablero[i][j] == null ? "---- " : this.tablero[i][j] + " ");
+            System.out.print(this.tablero[i][j] + " ");
             }
         System.out.println();
         }
     }
     public void printPiezas(){
-        int i;
-        for (Pieza pieza : this.Piezas){
-            System.out.print(pieza + " ");
-            
+        
+        for (int i = 0; i < this.Piezas.size(); i++){
+            System.out.print(this.Piezas.get(i)+ " ");
+            if ((i+1)%size == 0)
+                System.out.println("");
+        }
+    }
+    public void piezasToTablero(){
+        for (int i = 0; i < this.Piezas.size(); i++){
+            this.colocarPieza(this.getRow(i), this.getCol(i), this.Piezas.get(i));
         }
     }
     public int howGood(){
