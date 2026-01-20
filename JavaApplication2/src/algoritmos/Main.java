@@ -69,8 +69,8 @@ public class Main {
         puzzle.print();
         System.out.println("--------Deordenado---------");
         PuzzleFactory.desordenarPuzzle(puzzle);
-        puzzle.limpiarTablero();
         puzzle.print();
+        puzzle.limpiarTablero();
         System.out.println("----Ordenado por fuerza----");
         solverFuerza.resolver(puzzle);
         solverFuerza.printInfo();
@@ -83,8 +83,8 @@ public class Main {
         puzzle2.print();
         System.out.println("--------Deordenado---------");
         PuzzleFactory.desordenarPuzzle(puzzle2);
-        puzzle2.limpiarTablero();
         puzzle2.print();
+        puzzle2.limpiarTablero();
         System.out.println("----Ordenado por fuerza----");
         solverFuerza.resolver(puzzle2);
         solverFuerza.printInfo();
@@ -96,9 +96,9 @@ public class Main {
         puzzle3 = PuzzleFactory.createRandom(10, 9);
         puzzle3.print();
         System.out.println("--------Deordenado---------");
-        PuzzleFactory.desordenarPuzzle(puzzle3);
-        puzzle3.limpiarTablero();
+        PuzzleFactory.desordenarPuzzle(puzzle3);        
         puzzle3.print();
+        puzzle3.limpiarTablero();
         System.out.println("----Ordenado por fuerza----");
         solverFuerza.resolver(puzzle3);
         solverFuerza.printInfo();
@@ -115,8 +115,8 @@ public class Main {
         puzzle4.print();
         System.out.println("--------Deordenado---------");
         PuzzleFactory.desordenarPuzzle(puzzle4);
-        puzzle4.limpiarTablero();
         puzzle4.print();
+        puzzle4.limpiarTablero();
         System.out.println("----Ordenado por fuerza----");
         solverFuerza.resolver(puzzle4);
         solverFuerza.printInfo();
@@ -126,8 +126,8 @@ public class Main {
     }
     
     public static void main(String[] args) {
-        imprimirPuzzles();
-        //imprimirPorFuerza();
+        //imprimirPuzzles();
+        imprimirPorFuerza();
         
     }
     
