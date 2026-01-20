@@ -130,6 +130,7 @@ public class PuzzleFactory {
                     piezaOriginal.getLeft(),
                     piezaOriginal.getId()
                 );
+                
                 nuevo.colocarPieza(row, column, piezaNueva);
             }
         }
@@ -137,9 +138,8 @@ public class PuzzleFactory {
         return nuevo;
     }
 
-    public static void desordenarPuzzle(Puzzle rompCabezas){
-        Collections.shuffle(rompCabezas.getPiezas());
-        /*
+    public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
+        
         ArrayList<Pieza> lista = new ArrayList<>();
         int tamano= rompCabezas.getSize();
         int indice=0;
@@ -156,6 +156,7 @@ public class PuzzleFactory {
                         original.getLeft(),
                         original.getId());
                 if (pieza!=null){
+                    
                     lista.add(pieza);
                 }
             }
@@ -177,6 +178,6 @@ public class PuzzleFactory {
         
         //se devuelve la lista desordenada
         return rompCabezas;
-        */
+        
     }
 }

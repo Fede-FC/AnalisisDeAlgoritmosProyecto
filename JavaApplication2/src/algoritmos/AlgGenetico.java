@@ -87,12 +87,133 @@ public class AlgGenetico {
         }
         return hijo;
 }
+    public void mutarPoblacion() {
+        for (int i = 0; i < puzzleList.size(); i++) {
+            Puzzle original = puzzleList.get(i);
+            Puzzle mutado = PuzzleFactory.copiarPuzzle(original);
+
+            int fitnessAntes = original.evaluateFitness();
+
+            boolean reparo = repararRepetidos(mutado);
+
+            if (!reparo) {
+                mutacionLeve(mutado);
+            }
+
+            int fitnessDespues = mutado.evaluateFitness();
+
+            if (fitnessDespues > fitnessAntes) {
+                puzzleList.set(i, mutado);
+            }
+        }
+    }
+
+    private boolean repararRepetidos(Puzzle p) {
+        int size = p.getSize();
+        int n = size * size;
+        boolean[] vistos = new boolean[n];
+        ArrayList<int[]> repetidas = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int r = i / size;
+            int c = i % size;
+            Pieza pieza = p.getPieza(r, c);
+            if (pieza == null) continue;
+
+            int id = pieza.getId();
+            if (vistos[id]) {
+                repetidas.add(new int[]{r, c});
+            } else {
+                vistos[id] = true;
+            }
+        }
+
+        ArrayList<Integer> faltantes = new ArrayList<>();
+        for (int id = 0; id < n; id++) {
+            if (!vistos[id]) {
+                faltantes.add(id);
+            }
+        }
+
+        if (repetidas.isEmpty()) return false;
+
+        Pieza molde = null;
+        for (int i = 0; i < size && molde == null; i++) {
+            for (int j = 0; j < size; j++) {
+                Pieza tmp = p.getPieza(i, j);
+                if (tmp != null) {
+                    molde = tmp;
+                    break;
+                }
+            }
+        }
+
+        int idx = 0;
+        for (int[] pos : repetidas) {
+            int idFaltante = faltantes.get(idx++);
+
+            Pieza nueva = new Pieza(
+                    molde.getTop(),
+                    molde.getRight(),
+                    molde.getBottom(),
+                    molde.getLeft(),
+                    idFaltante
+            );
+
+            p.colocarPieza(pos[0], pos[1], nueva);
+        }
+
+        return true;
+    }
+
+    private void mutacionLeve(Puzzle p) {
+        Random rand = new Random();
+        int size = p.getSize();
+
+        if (rand.nextBoolean()) {
+            int r1 = rand.nextInt(size);
+            int c1 = rand.nextInt(size);
+            int r2 = rand.nextInt(size);
+            int c2 = rand.nextInt(size);
+
+            Pieza a = p.getPieza(r1, c1);
+            Pieza b = p.getPieza(r2, c2);
+
+            if (a != null && b != null) {
+                p.colocarPieza(r1, c1, b);
+                p.colocarPieza(r2, c2, a);
+            }
+        } else {
+            int r = rand.nextInt(size);
+            int c = rand.nextInt(size);
+
+            Pieza pieza = p.getPieza(r, c);
+            if (pieza != null) {
+                if (rand.nextBoolean()) pieza.rotarIzq();
+                else pieza.rotarDer();
+            }
+        }
+    }
+
+
+    private Pieza buscarPiezaPorId(Puzzle p, int id) {
+        int size = p.getSize();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (p.getPieza(i, j).getId() == id) {
+                    return p.getPieza(i, j);
+                }
+            }
+        }
+        return null;
+    }
+
 
     
     
     public void resolver(){
         ArrayList<Puzzle> hijos;
-        for (int generation = 0; generation < 10; generation++) {
+        for (int generation = 0; generation < 20000; generation++) {
             //Ordenar
             Collections.sort(puzzleList, (a,b) -> b.evaluateFitness() - a.evaluateFitness());
             //Hijos=2*Poblacion inicial - BUA DE LOCOS
@@ -110,7 +231,7 @@ public class AlgGenetico {
             puzzleList.subList(poblacionInicial, puzzleList.size()).clear();
             
             //Falta metodo mutar
-            
+            mutarPoblacion();
 
         }
          
@@ -120,31 +241,40 @@ public class AlgGenetico {
     
     
     public static void main(String[] args) {
-        Puzzle rompCabezas = new Puzzle(4);
-        ArrayList<Puzzle> puzzleList= new ArrayList<>();
-        rompCabezas = PuzzleFactory.createRandom(4, 9);
-        rompCabezas.print();
-        //De locos
-        int poblacionInicial = 30;
-        if (rompCabezas.getSize()<30){
-            poblacionInicial=rompCabezas.getSize();
-        } 
-        
-        
-        System.out.println("1-----------------------------------1");
-        puzzleList.add(rompCabezas);
-        Puzzle puzzle = new Puzzle(rompCabezas.getSize());
-        puzzle = PuzzleFactory.createRandom(rompCabezas.getSize(), 9);
-        puzzle.print();
-        System.out.println("1-----------------------------------1");
-        System.out.println("1-----------------------------------1");
-        System.out.println("1-----------------------------------1");
-        for (int individuos = 0; individuos < poblacionInicial-1; individuos++) {
-            Puzzle nuevo = PuzzleFactory.copiarPuzzle(puzzle);
-            puzzleList.add(nuevo);
-            nuevo.print();
-            System.out.println(nuevo.evaluateFitness());
-            System.out.println("1-----------------------------------1");
+
+        int size = 3;
+        int maxValue = 9;
+
+        ArrayList<Puzzle> puzzleList = new ArrayList<>();
+
+        Puzzle base = PuzzleFactory.createRandom(size, maxValue);
+        base = PuzzleFactory.desordenarPuzzle(base);
+        base.print();
+        System.out.println("--------------------------------");
+
+        int poblacionInicial = 3;
+        if (size < 30) {
+            poblacionInicial = size;
         }
+
+        puzzleList.add(base);
+
+        for (int i = 0; i < poblacionInicial - 1; i++) {
+            Puzzle copia = PuzzleFactory.copiarPuzzle(base);
+            copia = PuzzleFactory.desordenarPuzzle(copia);
+            puzzleList.add(copia);
+            copia.print();
+            System.out.println("Fitness: " + copia.evaluateFitness());
+            System.out.println("--------------------------------");
+        }
+
+        AlgGenetico ag = new AlgGenetico(puzzleList);
+        ag.resolver();
+
+        System.out.println("Resultado final:");
+        Puzzle mejor = puzzleList.get(0);
+        mejor.print();
+        System.out.println("Fitness final: " + mejor.evaluateFitness());
     }
+
 }
