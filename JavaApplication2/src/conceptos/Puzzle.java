@@ -32,15 +32,7 @@ public class Puzzle {
     public void quitarPieza(int row, int col){
         this.tablero[row][col] = null;
     }
-    // Funcion que indica si el puzle esta completo :D
-    public boolean isComplet(){ // O(n!)
-        for (int i = 0; i < this.size; i++){
-            for (int j = 0; j < this.size; j++){
-                if (this.tablero[i][j] == null) return false;
-            }
-        }
-        return true; 
-    }
+    
     public Pieza getPieza(int row, int col){
         return this.tablero[row][col];
     }
@@ -87,19 +79,12 @@ public class Puzzle {
         }
     }
     public void piezasToTablero(){
+        this.limpiarTablero();
         for (int i = 0; i < this.Piezas.size(); i++){
             this.colocarPieza(this.getRow(i), this.getCol(i), this.Piezas.get(i));
         }
     }
-    public int howGood(){
-        int count=0;
-        if (this.used == null) return count;
-        for (int i = 0; i < this.used.length; i++){
-            if (used[i])
-                count++;
-        }
-        return count;
-    }
+    
     //Esta funcion devuelve la cantidad de piezas que coinciden entre si
     //Es decir, si algun lado coincide sin importar su posicion
     public int evaluateFitness(){
@@ -119,17 +104,17 @@ public class Puzzle {
         }
         return coincidencias;
     }
-    public boolean[] getUsed() { return used;  }
 
-    public void setUsed(boolean[] used) { this.used = used;  }
+
+
 
     public ArrayList<Pieza> getPiezas() {  return Piezas; }
 
-    public void setPiezas(ArrayList<Pieza> Piezas) {   this.Piezas = Piezas; 
-    for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                this.colocarPieza(i, j, this.Piezas.get(i+j));
-            }
+    public void setPiezas(ArrayList<Pieza> Piezas) {   
+        this.Piezas = Piezas; 
+        this.limpiarTablero();
+        for (int i = 0; i < this.Piezas.size(); i++){
+            this.colocarPieza(this.getRow(i), this.getCol(i), this.Piezas.get(i));
         }
     }
     public int getRow(int posicion){ return posicion / this.size; }

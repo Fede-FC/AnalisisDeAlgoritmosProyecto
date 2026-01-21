@@ -76,7 +76,7 @@ public class PuzzleFactory {
 
         puzzle.setPiezas(piezas); 
         
-        puzzle.piezasToTablero();
+
         return puzzle; 
     }
             
@@ -139,7 +139,9 @@ public class PuzzleFactory {
     }
 
     public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
-        
+        Collections.shuffle(rompCabezas.getPiezas());
+        rompCabezas.piezasToTablero();
+        /*
         ArrayList<Pieza> lista = new ArrayList<>();
         int tamano= rompCabezas.getSize();
         int indice=0;
@@ -177,6 +179,7 @@ public class PuzzleFactory {
         }
         
         //se devuelve la lista desordenada
+        */
         return rompCabezas;
         
     }
