@@ -62,6 +62,7 @@ public class Main {
     }
     public static void imprimirPorFuerza(){
         porFuerza solverFuerza = new porFuerza();
+        Long inicio, fin, tiempo, memoriaAntes, memoriaDespues, memoriaUsada;
         
         System.out.println("---------Prueba 1---------");
         Puzzle puzzle = new Puzzle(3);
@@ -72,36 +73,75 @@ public class Main {
         puzzle.print();
         puzzle.limpiarTablero();
         System.out.println("----Ordenado por fuerza----");
+        
+        inicio = System.nanoTime();
+        Runtime rt = Runtime.getRuntime();
+        memoriaAntes = rt.totalMemory() - rt.freeMemory();
         solverFuerza.resolver(puzzle);
+        memoriaDespues = rt.totalMemory() - rt.freeMemory();
+        memoriaUsada = memoriaDespues- memoriaAntes;
+        
+        fin = System.nanoTime();
         solverFuerza.printInfo();
+        tiempo = fin - inicio;
+        
+        System.out.println("Tiempo: " + tiempo + " nanosegundos");
+        System.out.println("Memoria usada (bytes): " + memoriaUsada);
+        System.out.println("Memoria usada (KB): " + (memoriaUsada / 1024.0));
+        System.out.println("Memoria usada (MB): " + (memoriaUsada / 1024.0 / 1024.0));
         puzzle.print();
         System.out.println("");
         
         System.out.println("---------Prueba 2--------");
         Puzzle puzzle2 = new Puzzle(5);
-        puzzle2 = PuzzleFactory.createRandom(5, 9);
+        puzzle2 = PuzzleFactory.createRandom(5, limNumerico);
         puzzle2.print();
         System.out.println("--------Deordenado---------");
         PuzzleFactory.desordenarPuzzle(puzzle2);
         puzzle2.print();
         puzzle2.limpiarTablero();
         System.out.println("----Ordenado por fuerza----");
+        inicio = System.nanoTime();
+
+        memoriaAntes = rt.totalMemory() - rt.freeMemory();
         solverFuerza.resolver(puzzle2);
+        memoriaDespues = rt.totalMemory() - rt.freeMemory();
+        memoriaUsada = memoriaDespues- memoriaAntes;
+        
+        fin = System.nanoTime();
         solverFuerza.printInfo();
+        tiempo = fin - inicio;
+        
+        System.out.println("Tiempo: " + tiempo + " nanosegundos");
+        System.out.println("Memoria usada (bytes): " + memoriaUsada);
+        System.out.println("Memoria usada (KB): " + (memoriaUsada / 1024.0));
+        System.out.println("Memoria usada (MB): " + (memoriaUsada / 1024.0 / 1024.0));
         puzzle2.print();
         System.out.println("");
         
         System.out.println("---------Prueba 3---------");
         Puzzle puzzle3 = new Puzzle(10);
-        puzzle3 = PuzzleFactory.createRandom(10, 9);
+        puzzle3 = PuzzleFactory.createRandom(10, limNumerico);
         puzzle3.print();
         System.out.println("--------Deordenado---------");
         PuzzleFactory.desordenarPuzzle(puzzle3);        
         puzzle3.print();
         puzzle3.limpiarTablero();
         System.out.println("----Ordenado por fuerza----");
+        inicio = System.nanoTime();
+        memoriaAntes = rt.totalMemory() - rt.freeMemory();
         solverFuerza.resolver(puzzle3);
+        memoriaDespues = rt.totalMemory() - rt.freeMemory();
+        memoriaUsada = memoriaDespues- memoriaAntes;
+        
+        fin = System.nanoTime();
         solverFuerza.printInfo();
+        tiempo = fin - inicio;
+        
+        System.out.println("Tiempo: " + tiempo + " nanosegundos ");
+        System.out.println("Memoria usada (bytes): " + memoriaUsada);
+        System.out.println("Memoria usada (KB): " + (memoriaUsada / 1024.0));
+        System.out.println("Memoria usada (MB): " + (memoriaUsada / 1024.0 / 1024.0));
         puzzle3.print();
         System.out.println("");
         
@@ -110,7 +150,7 @@ public class Main {
         
         System.out.println("---------Prueba 4---------");
         Puzzle puzzle4 = new Puzzle(15);
-        puzzle4 = PuzzleFactory.createRandom(15, 9);
+        puzzle4 = PuzzleFactory.createRandom(15, limNumerico);
         System.out.println("Print del main");
         puzzle4.print();
         System.out.println("--------Deordenado---------");
@@ -118,8 +158,17 @@ public class Main {
         puzzle4.print();
         puzzle4.limpiarTablero();
         System.out.println("----Ordenado por fuerza----");
+        inicio = System.nanoTime();
+        memoriaAntes = rt.totalMemory() - rt.freeMemory();
         solverFuerza.resolver(puzzle4);
+        memoriaDespues = rt.totalMemory() - rt.freeMemory();
+        memoriaUsada = memoriaDespues- memoriaAntes;
+        
+        fin = System.nanoTime();
         solverFuerza.printInfo();
+        tiempo = fin - inicio;
+        
+        System.out.println("Tiempo: " + tiempo + " nanosegundos " + " Memoraia: " + memoriaUsada);
         puzzle4.print();
         System.out.println("");
         
