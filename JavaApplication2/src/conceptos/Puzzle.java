@@ -65,7 +65,7 @@ public class Puzzle {
     public void print() {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            System.out.print(this.tablero[i][j] + " ");
+            System.out.print(this.tablero[i][j] == null ? "- - - - " : this.tablero[i][j] + " ");
             }
         System.out.println();
         }
@@ -106,7 +106,7 @@ public class Puzzle {
     }
 
 
-
+    public void definirPiezas(ArrayList<Pieza> Piezas) {   this.Piezas = Piezas;  }
 
     public ArrayList<Pieza> getPiezas() {  return Piezas; }
 

@@ -141,9 +141,31 @@ public class Main {
         
     }
     
+    public static void imprimirGreedy(){
+        Greedy greedySolve = new Greedy();
+        Medicion medidor= new Medicion();
+
+        System.out.println("---------Prueba avance rapido 1---------");
+        Puzzle piezas = PuzzleFactory.createRandom(10, 15);
+        piezas.print();
+        Puzzle puzzle1 = new Puzzle(10);
+        System.out.println("---------Desordenado avance rapido 1---------");
+        piezas = PuzzleFactory.desordenarPuzzle(piezas);
+        //piezas.printPiezas();
+        //piezas.print();
+        System.out.println("----Ordenado de avance rapido----");
+        puzzle1.definirPiezas(piezas.getPiezas());
+        //puzzle1.print();
+        medidor.iniciarMedicion();
+        greedySolve.solve(puzzle1);
+        medidor.finMedicion();
+        puzzle1.print();
+    }
+    
     public static void main(String[] args) {
         //imprimirPuzzles();
-        imprimirPorFuerza();
+        //imprimirPorFuerza();
+        imprimirGreedy();
         
     }
     
