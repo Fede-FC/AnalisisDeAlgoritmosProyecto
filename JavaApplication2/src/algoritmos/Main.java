@@ -146,19 +146,19 @@ public class Main {
         Medicion medidor= new Medicion();
 
         System.out.println("---------Prueba avance rapido 1---------");
-        Puzzle piezas = PuzzleFactory.createRandom(10, 15);
-        piezas.print();
-        Puzzle puzzle1 = new Puzzle(10);
-        System.out.println("---------Desordenado avance rapido 1---------");
-        piezas = PuzzleFactory.desordenarPuzzle(piezas);
-        //piezas.printPiezas();
+        int cantPiezas = 9;
+        Puzzle piezas = PuzzleFactory.createRandom(40, cantPiezas);
+        Puzzle puzzle1 = new Puzzle(40);
         //piezas.print();
-        System.out.println("----Ordenado de avance rapido----");
+        //System.out.println("---------Desordenadas---------");
+        piezas = PuzzleFactory.desordenarPuzzle(piezas);
+        //piezas.print();
+        System.out.println("----Ordenado de avance rapido 1----");
         puzzle1.definirPiezas(piezas.getPiezas());
-        //puzzle1.print();
         medidor.iniciarMedicion();
-        greedySolve.solve(puzzle1);
+        greedySolve.solve(puzzle1, cantPiezas);
         medidor.finMedicion();
+        greedySolve.variables();
         puzzle1.print();
     }
     
