@@ -24,6 +24,62 @@ public class Puzzle {
     public void definirUsed(int pos, boolean valor){
         this.used[pos] = valor;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Puzzle other = (Puzzle) obj;
+
+        if (this.size != other.size) return false;
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Pieza p1 = this.tablero[i][j];
+                Pieza p2 = other.tablero[i][j];
+
+                if (p1 == null && p2 == null) continue;
+                if (p1 == null || p2 == null) return false;
+                if (p1.getId() != p2.getId()) return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                hash = 31 * hash + (tablero[i][j] == null ? 0 : tablero[i][j].getId());
+            }
+        }
+        return hash;
+    }
+    public Puzzle clonar() {
+        Puzzle copia = new Puzzle(this.size);
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Pieza p = this.tablero[i][j];
+                if (p != null) {
+                    copia.colocarPieza(i, j,
+                        new Pieza(
+                            p.getTop(),
+                            p.getRight(),
+                            p.getBottom(),
+                            p.getLeft(),
+                            p.getId()
+                        )
+                    );
+                }
+            }
+        }
+        return copia;
+    }
+
+
     public boolean conocerUsed(int pos){return this.used[pos];}
     
     public void colocarPieza(int row, int col, Pieza pieza){
