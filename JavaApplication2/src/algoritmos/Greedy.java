@@ -46,11 +46,13 @@ public class Greedy{
     
     public void variables(){
         System.out.println("Realizo "+ this.c+" comparaciones y " + this.a+" asignaciones");
+        long b = a + c;
+        System.out.println("Total: " + b);
     }
 
     // Se crean hashmaps con las piezas segun el numero en cada posicion
     public void buildHashMaps(ArrayList<Pieza> piezas){
-        for(Pieza p : piezas){ c++;
+        for(Pieza p : piezas){ c++; a++;
             topMap.computeIfAbsent(p.getTop(), k -> new ArrayList<>()).add(p);
             rightMap.computeIfAbsent(p.getRight(), k -> new ArrayList<>()).add(p);
             bottomMap.computeIfAbsent(p.getBottom(), k -> new ArrayList<>()).add(p);
@@ -61,7 +63,7 @@ public class Greedy{
 
     // Se cuentan las veces que aparece cada numero para ver cuales son mas raros
     public void countFrequencies(ArrayList<Pieza> piezas, int[] frecuencias){
-        for(Pieza p : piezas){ c++;
+        for(Pieza p : piezas){ c++; a++;
             frecuencias[p.getTop()]++;
             frecuencias[p.getBottom()]++;
             frecuencias[p.getRight()]++;
