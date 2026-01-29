@@ -6,6 +6,7 @@ package algoritmos;
 import conceptos.Puzzle;
 import conceptos.PuzzleFactory;
 import auxiliar.Medicion;
+import java.util.ArrayList;
 /**
  * @author: 
  * 
@@ -161,11 +162,68 @@ public class Main {
         greedySolve.variables();
         puzzle1.print();
     }
+    public static void imprimirGenetico() {
+
+        Medicion medidor = new Medicion();
+
+        int[] tamanos = {60}; // puedes agregar más si quieres
+
+        for (int t = 0; t < tamanos.length; t++) {
+
+            int size = tamanos[t];
+            int maxValue = supNumerico;
+
+            System.out.println("========= PRUEBA GENÉTICO | " + size + "x" + size + " =========");
+
+            ArrayList<Puzzle> puzzleList = new ArrayList<>();
+
+            // Puzzle base
+            Puzzle base = PuzzleFactory.createRandom(size, maxValue);
+            PuzzleFactory.desordenarPuzzle(base);
+
+            System.out.println("---- Puzzle base desordenado ----");
+            base.print();
+            System.out.println("--------------------------------");
+
+            // Tamaño de población
+            int poblacionInicial = 30;
+            if (size < 30) {
+                poblacionInicial = size;
+            }
+            poblacionInicial++;
+            puzzleList.add(base);
+
+            // Generar población inicial
+            for (int i = 0; i < poblacionInicial - 1; i++) {
+                Puzzle copia = PuzzleFactory.copiarPuzzle(base);
+                PuzzleFactory.desordenarPuzzle(copia);
+                puzzleList.add(copia);
+
+                System.out.println("Individuo " + (i + 1));
+                copia.print();
+                System.out.println("Fitness: " + copia.evaluateFitness());
+                System.out.println("--------------------------------");
+            }
+
+            // Ejecutar algoritmo genético
+            AlgGenetico ag = new AlgGenetico(puzzleList);
+
+            System.out.println("---- Ejecutando algoritmo genético ----");
+            medidor.iniciarMedicion();
+            ag.resolver();
+            medidor.finMedicion();
+            System.out.println(ag.getAsignaciones()+ "");
+            System.out.println(ag.getComparaciones() + "");
+            System.out.println("=============================================\n");
+        }
+    }
+
     
     public static void main(String[] args) {
         //imprimirPuzzles();
         //imprimirPorFuerza();
-        imprimirGreedy();
+        //imprimirGreedy();
+        imprimirGenetico();
         
     }
     

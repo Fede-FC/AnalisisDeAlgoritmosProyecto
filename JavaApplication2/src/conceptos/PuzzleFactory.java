@@ -119,67 +119,30 @@ public class PuzzleFactory {
     }*/
     public static Puzzle copiarPuzzle(Puzzle original){
         Puzzle nuevo = new Puzzle(original.getSize());
+        ArrayList<Pieza> nuevasPiezas = new ArrayList<>();
 
         for (int row = 0; row < original.getSize(); row++) {
             for (int column = 0; column < original.getSize(); column++) {
-                Pieza piezaOriginal = original.getPieza(row, column);
-                Pieza piezaNueva = new Pieza(
-                    piezaOriginal.getTop(),
-                    piezaOriginal.getRight(),
-                    piezaOriginal.getBottom(),
-                    piezaOriginal.getLeft(),
-                    piezaOriginal.getId()
+                Pieza p = original.getPieza(row, column);
+                Pieza copia = new Pieza(
+                    p.getTop(),
+                    p.getRight(),
+                    p.getBottom(),
+                    p.getLeft(),
+                    p.getId()
                 );
-                
-                nuevo.colocarPieza(row, column, piezaNueva);
+                nuevasPiezas.add(copia);
             }
         }
 
+        nuevo.setPiezas(nuevasPiezas); // 🔥 clave
         return nuevo;
     }
+
 
     public static Puzzle desordenarPuzzle(Puzzle rompCabezas){
         Collections.shuffle(rompCabezas.getPiezas());
         rompCabezas.piezasToTablero();
-        /*
-        ArrayList<Pieza> lista = new ArrayList<>();
-        int tamano= rompCabezas.getSize();
-        int indice=0;
-
-        //Basicamente cree una lista de piezas, esto lo hago por que hay un
-        //metodo que desordena las lista automaticamente
-        for (int row=0; row<tamano; row++ ){
-            for (int column=0; column<tamano; column++ ){
-                Pieza original = rompCabezas.getPieza(row, column);
-                Pieza pieza= new Pieza(
-                        original.getTop(), 
-                        original.getRight(), 
-                        original.getBottom(), 
-                        original.getLeft(),
-                        original.getId());
-                if (pieza!=null){
-                    
-                    lista.add(pieza);
-                }
-            }
-            
-        }
-        
-        //Ahora se desordena la lista
-        Collections.shuffle(lista);
-        
-        //Aqui se cambia los valores de las piezas de rompCabezas por los de 
-        //lista(son los mismos en distinto orden), por lo que ahora si se puede
-        //usar con los algoritmos
-        for (int row=0; row<tamano; row++ ){
-            for (int column=0; column<tamano; column++ ){
-                rompCabezas.colocarPieza(row, column, lista.get(indice++));
-                
-            }
-        }
-        
-        //se devuelve la lista desordenada
-        */
         return rompCabezas;
         
     }
