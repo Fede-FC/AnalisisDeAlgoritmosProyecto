@@ -39,7 +39,6 @@ public class AlgGenetico {
     }
     
     public ArrayList<Puzzle> cruce(ArrayList<Puzzle> ancestros) {
-        Random random = new Random();
         hijos.clear();
         asignaciones += 2; // random, listaPuzzles
         int listaPuzzles = this.tamano * this.tamano;
@@ -55,11 +54,11 @@ public class AlgGenetico {
             if (padre == madre) continue;
 
             asignaciones += 4; // puntoA, puntoB, hijo1, hijo2
-            int puntoA = random.nextInt(listaPuzzles);
-            int puntoB = random.nextInt(listaPuzzles);
+            int puntoA = this.RAND.nextInt(listaPuzzles);
+            int puntoB = this.RAND.nextInt(listaPuzzles);
 
-            Puzzle hijo1 = crucePorBloques(padre, madre);
-            Puzzle hijo2 = crucePorBloques(madre, padre);
+            Puzzle hijo1 = crucePMX(padre, madre, puntoA, puntoB);
+            Puzzle hijo2 = crucePMX(madre, padre, puntoA, puntoB);
             optimizacionLocal(hijo1, 20);
             optimizacionLocal(hijo2, 20);
 
@@ -272,60 +271,6 @@ public class AlgGenetico {
             }
         }
     }
-    private Puzzle crucePorBloques(Puzzle p1, Puzzle p2) {
-        Puzzle hijo = new Puzzle(tamano);
-        boolean[] usados = new boolean[tamano * tamano];
-
-        int bloqueSize = 2; // 2x2
-
-        for (int r = 0; r < tamano; r += bloqueSize) {
-            for (int c = 0; c < tamano; c += bloqueSize) {
-
-                Puzzle fuente = RAND.nextBoolean() ? p1 : p2;
-
-                for (int i = 0; i < bloqueSize; i++) {
-                    for (int j = 0; j < bloqueSize; j++) {
-                        int rr = r + i;
-                        int cc = c + j;
-
-                        if (rr >= tamano || cc >= tamano) continue;
-
-                        Pieza pieza = fuente.getPieza(rr, cc);
-                        if (pieza == null) continue;
-
-                        int id = pieza.getId();
-                        if (!usados[id]) {
-                            hijo.colocarPieza(rr, cc, copiar(pieza));
-                            usados[id] = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        // rellenar huecos
-        for (int r = 0; r < tamano; r++) {
-            for (int c = 0; c < tamano; c++) {
-                if (hijo.getPieza(r, c) == null) {
-                    Pieza p = buscarNoUsada(p1, usados);
-                    hijo.colocarPieza(r, c, copiar(p));
-                    usados[p.getId()] = true;
-                }
-            }
-        }
-        return hijo;
-    }
-    private Pieza buscarNoUsada(Puzzle p, boolean[] usados) {
-        for (int r = 0; r < tamano; r++) {
-            for (int c = 0; c < tamano; c++) {
-                Pieza pieza = p.getPieza(r, c);
-                if (pieza != null && !usados[pieza.getId()])
-                    return pieza;
-            }
-        }
-        return null;
-    }
-
 
     private void eliminarRepetidosConMutacion() {
         HashSet<Puzzle> vistos = new HashSet<>();
