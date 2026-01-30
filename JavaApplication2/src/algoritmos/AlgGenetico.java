@@ -53,8 +53,13 @@ public class AlgGenetico {
 
             Puzzle hijo1 = crucePMX(padre, madre, puntoA, puntoB);
             Puzzle hijo2 = crucePMX(madre, padre, puntoA, puntoB);
-            optimizacionLocal(hijo1, 20);
-            optimizacionLocal(hijo2, 20);
+            int intentos =
+                (tamano <= 3) ? 200 :
+                (tamano <= 5) ? 120 :
+                (tamano <= 10) ? 40 : 5;
+            optimizacionLocal(hijo1, intentos);
+            optimizacionLocal(hijo2, intentos);
+
 
             
             System.out.println("CRUCE:");
@@ -78,7 +83,7 @@ public class AlgGenetico {
 
     public Puzzle crucePMX(Puzzle padre, Puzzle madre, int puntoA, int puntoB) {
         int totPiezas = tamano * tamano;
-        asignaciones += 5; // totPiezas, piezaP, piezaM, hijo, nuevo
+        asignaciones += 5; 
         Pieza[] piezaP = new Pieza[totPiezas];
         Pieza[] piezaM = new Pieza[totPiezas];
         Pieza[] hijo = new Pieza[totPiezas];
@@ -86,26 +91,26 @@ public class AlgGenetico {
 
         comparaciones++;
         if (puntoA > puntoB) {
-            asignaciones += 3; // swap
+            asignaciones += 3; 
             int t = puntoA;
             puntoA = puntoB;
             puntoB = t;
         }
 
-        // Primer loop: Llenado de arreglos
+        
         for (int i = 0; i < totPiezas; i++) {
-            comparaciones++; // i < totPiezas
-            asignaciones += 4; // i++, row, column, piezaP/M[i]
+            comparaciones++; 
+            asignaciones += 4; 
             int row = i / tamano;
             int column = i % tamano;
             piezaP[i] = padre.getPieza(row, column);
             piezaM[i] = madre.getPieza(row, column);
         }
 
-        // Segundo loop: Mapeo PMX
+        
         for (int posicion = puntoA; posicion <= puntoB; posicion++) {
             comparaciones++;
-            asignaciones += 2; // posicion++, hijo[posicion]
+            asignaciones += 2; 
             hijo[posicion] = copiar(piezaP[posicion]);
         }
 
@@ -191,26 +196,33 @@ public class AlgGenetico {
         asignaciones++;
 
         for (int i = 0; i < puzzleList.size(); i++) {
-            comparaciones += 2; // loop y contains
-            asignaciones++; // i++
+            asignaciones++;
             Puzzle actual = puzzleList.get(i);
 
-            if (vistos.contains(actual)) {
-                asignaciones += 3; // fitness, mutado, fitnessDespues
+            boolean esRepetido = vistos.contains(actual);
+
+            
+            if (esRepetido || RAND.nextDouble() < 0.20) {
+
                 int fitnessAntes = actual.evaluateFitness();
                 Puzzle mutado = actual.clonar();
                 mutacionLeve(mutado);
                 int fitnessDespues = mutado.evaluateFitness();
 
-                comparaciones++;
-                if (fitnessDespues > fitnessAntes) {
+                
+                if (fitnessDespues >= fitnessAntes) {
                     puzzleList.set(i, mutado);
+                    vistos.add(mutado);
+                } else {
+                    vistos.add(actual);
                 }
+
             } else {
                 vistos.add(actual);
             }
         }
     }
+
     private void optimizacionLocal(Puzzle p, int intentos) {
         Random rand = new Random();
         int mejorFitness = p.evaluateFitness();
@@ -301,7 +313,6 @@ public class AlgGenetico {
                 }
             }
 
-            // si no se pudo rescatar → se elimina (no se agrega)
         }
 
     puzzleList = nuevaPoblacion;
