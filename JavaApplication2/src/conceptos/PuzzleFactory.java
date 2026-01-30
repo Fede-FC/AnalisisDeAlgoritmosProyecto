@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package conceptos;
 
 import java.util.ArrayList;
@@ -9,10 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 
-/**
- *
- * @author feder
- */
+
 public class PuzzleFactory {
     ArrayList<Pieza> Piezas;
     int pieceIdCcounter;
