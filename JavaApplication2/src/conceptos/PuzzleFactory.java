@@ -73,44 +73,7 @@ public class PuzzleFactory {
 
         return puzzle; 
     }
-            
-        /*Random rand = new Random();
         
-        int[][] horizontal  = new int[size][size + 1];
-        int[][] vertical = new int[size+1][size];
-        
-        // Rellenar bordes horizontales 
-        for (int i = 0; i < size; i++){
-            for (int j = 0; j <= size; j++){
-                horizontal[i][j] = rand.nextInt(maxValue + 1);
-            }
-        }
-        for (int i = 0; i <= size; i++){
-            for (int j = 0; j < size; j++){
-                vertical[i][j] = rand.nextInt(maxValue + 1);
-            }
-        }
-        Puzzle puzzle = new Puzzle(size);
-        ArrayList<Pieza> piezas = new ArrayList<>();
-        int id = 0;
-        
-        for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                Pieza p = new Pieza();
-                p.setId(id++);
-                // rellenando los bordes de la pieza con los numeros generados anteriormente
-                p.setTop(vertical[i][j]);
-                p.setBottom(vertical[i+1][j]);
-                p.setLeft(horizontal[i][j]);
-                p.setRight(horizontal[i][j+1]);
-                
-                puzzle.colocarPieza(j, j, p);
-                piezas.add(p);
-            }
-        }
-        puzzle.setPiezas(piezas);
-        return puzzle;
-    }*/
     public static Puzzle copiarPuzzle(Puzzle original){
         Puzzle nuevo = new Puzzle(original.getSize());
         ArrayList<Pieza> nuevasPiezas = new ArrayList<>();
@@ -129,7 +92,7 @@ public class PuzzleFactory {
             }
         }
 
-        nuevo.setPiezas(nuevasPiezas); // 🔥 clave
+        nuevo.setPiezas(nuevasPiezas);
         return nuevo;
     }
 

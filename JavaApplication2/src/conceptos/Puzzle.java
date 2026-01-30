@@ -86,7 +86,7 @@ public class Puzzle {
         return this.tablero[row][col];
     }
     /*
-    Funcion que verifica si la pieza a colocar es valida (para verificar solucion).
+    Funcion que verifica si la pieza a colocar es valida.
     verifica arriba y izquierda.
     Derecha y abajo no ya que no sean crean todavia.
     */
@@ -211,6 +211,4 @@ public class Puzzle {
     public int getCol(int posicion){  return posicion % this.size;  }
     
     public int getSize() {  return size;}
-    public void setSize(int size) { this.size = size;  }
-    
 }
