@@ -166,7 +166,7 @@ public class Main {
 
         Medicion medidor = new Medicion();
 
-        int[] tamanos = {60}; // puedes agregar más si quieres
+        int[] tamanos = {5}; // puedes agregar más si quieres
 
         for (int t = 0; t < tamanos.length; t++) {
 
@@ -178,7 +178,7 @@ public class Main {
             ArrayList<Puzzle> puzzleList = new ArrayList<>();
 
             // Puzzle base
-            Puzzle base = PuzzleFactory.createRandom(size, maxValue);
+            Puzzle base = PuzzleFactory.createRandom(size, 9);
             PuzzleFactory.desordenarPuzzle(base);
 
             System.out.println("---- Puzzle base desordenado ----");
@@ -214,6 +214,7 @@ public class Main {
             medidor.finMedicion();
             System.out.println(ag.getAsignaciones()+ "");
             System.out.println(ag.getComparaciones() + "");
+            
             System.out.println("=============================================\n");
         }
     }

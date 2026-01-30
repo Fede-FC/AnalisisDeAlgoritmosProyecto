@@ -78,7 +78,7 @@ public class Puzzle {
         }
         return copia;
     }
-
+    
 
     public boolean conocerUsed(int pos){return this.used[pos];}
     
@@ -140,26 +140,66 @@ public class Puzzle {
             this.colocarPieza(this.getRow(i), this.getCol(i), this.Piezas.get(i));
         }
     }
-    
-    //Esta funcion devuelve la cantidad de piezas que coinciden entre si
-    //Es decir, si algun lado coincide sin importar su posicion
-    public int evaluateFitness(){
+    public int contarCoincidenciasReales() {
         int coincidencias = 0;
-        
-        
-        for (int row = 0; row < size; row++) {
-            for (int column = 0; column < size; column++) {
-                if (row<size-1){
-                    if (tablero[row][column].getBottom()== tablero[row+1][column].getTop()) coincidencias++;
+
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                Pieza actual = tablero[r][c];
+                if (actual == null) continue;
+
+                if (r < size - 1) {
+                    if (actual.getBottom() == tablero[r + 1][c].getTop())
+                        coincidencias++;
                 }
-                if (column<size-1){
-                    if (tablero[row][column].getRight()== tablero[row][column+1].getLeft()) coincidencias++;
-                } 
+
+                if (c < size - 1) {
+                    if (actual.getRight() == tablero[r][c + 1].getLeft())
+                        coincidencias++;
+                }
             }
-            
         }
         return coincidencias;
     }
+
+    //Esta funcion devuelve la cantidad de piezas que coinciden entre si
+    //Es decir, si algun lado coincide sin importar su posicion
+    public int evaluateFitness() {
+        int score = 0;
+
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                Pieza actual = tablero[r][c];
+                if (actual == null) continue;
+
+                int peso = 1;
+
+                // centro > borde > esquina
+                if (r > 0 && r < size - 1 && c > 0 && c < size - 1)
+                    peso = 3;
+                else if (r > 0 && r < size - 1 || c > 0 && c < size - 1)
+                    peso = 2;
+
+                // abajo
+                if (r < size - 1 && tablero[r + 1][c] != null) {
+                    if (actual.getBottom() == tablero[r + 1][c].getTop())
+                        score += 2 * peso;
+                    else
+                        score -= 1 * peso;
+                }
+
+                // derecha
+                if (c < size - 1 && tablero[r][c + 1] != null) {
+                    if (actual.getRight() == tablero[r][c + 1].getLeft())
+                        score += 2 * peso;
+                    else
+                        score -= 1 * peso;
+                }
+            }
+        }
+        return score;
+    }
+
 
 
     public void definirPiezas(ArrayList<Pieza> Piezas) {   this.Piezas = Piezas;  }

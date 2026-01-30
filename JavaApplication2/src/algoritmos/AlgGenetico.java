@@ -22,6 +22,8 @@ public class AlgGenetico {
     private ArrayList<Puzzle> hijos;
     private long asignaciones = 0;
     private long comparaciones = 0;
+    private static final Random RAND = new Random();
+
 
     public AlgGenetico(ArrayList<Puzzle> puzzlelist) {
         asignaciones += 3; // puzzleList, tamano, hijos
@@ -45,8 +47,9 @@ public class AlgGenetico {
         while (hijos.size() < 2 * poblacionInicial) {
             comparaciones++; 
             asignaciones += 2; // padre, madre
-            Puzzle padre = ancestros.get(random.nextInt(ancestros.size()));
-            Puzzle madre = ancestros.get(random.nextInt(ancestros.size()));
+            Puzzle padre = torneo(ancestros, 3);
+            Puzzle madre = torneo(ancestros, 3);
+
 
             comparaciones++;
             if (padre == madre) continue;
@@ -55,8 +58,11 @@ public class AlgGenetico {
             int puntoA = random.nextInt(listaPuzzles);
             int puntoB = random.nextInt(listaPuzzles);
 
-            Puzzle hijo1 = crucePMX(padre, madre, puntoA, puntoB);
-            Puzzle hijo2 = crucePMX(madre, padre, puntoA, puntoB);
+            Puzzle hijo1 = crucePorBloques(padre, madre);
+            Puzzle hijo2 = crucePorBloques(madre, padre);
+            optimizacionLocal(hijo1, 20);
+            optimizacionLocal(hijo2, 20);
+
             
             System.out.println("CRUCE:");
 
@@ -152,6 +158,19 @@ public class AlgGenetico {
         }
         return nuevo;
     }
+    
+    private Puzzle torneo(ArrayList<Puzzle> poblacion, int k) {
+        Random rand = new Random();
+        Puzzle mejor = null;
+
+        for (int i = 0; i < k; i++) {
+            Puzzle candidato = poblacion.get(rand.nextInt(poblacion.size()));
+            if (mejor == null || candidato.evaluateFitness() > mejor.evaluateFitness()) {
+                mejor = candidato;
+            }
+        }
+        return mejor;
+    }
 
     private boolean contiene(Pieza[] arr, int id) {
         for (Pieza p : arr) {
@@ -199,30 +218,156 @@ public class AlgGenetico {
             }
         }
     }
+    private void optimizacionLocal(Puzzle p, int intentos) {
+        Random rand = new Random();
+        int mejorFitness = p.evaluateFitness();
+
+        for (int i = 0; i < intentos; i++) {
+            Puzzle copia = p.clonar();
+
+            int r1 = rand.nextInt(p.getSize());
+            int c1 = rand.nextInt(p.getSize());
+            int r2 = rand.nextInt(p.getSize());
+            int c2 = rand.nextInt(p.getSize());
+
+            if (r1 == r2 && c1 == c2) continue;
+
+            Pieza a = copia.getPieza(r1, c1);
+            Pieza b = copia.getPieza(r2, c2);
+
+            if (a != null && b != null) {
+                copia.colocarPieza(r1, c1, b);
+                copia.colocarPieza(r2, c2, a);
+
+                int nuevoFitness = copia.evaluateFitness();
+                if (nuevoFitness > mejorFitness) {
+                    p.colocarPieza(r1, c1, b);
+                    p.colocarPieza(r2, c2, a);
+                    mejorFitness = nuevoFitness;
+                }
+            }
+        }
+    }
 
     private void mutacionLeve(Puzzle p) {
         Random rand = new Random();
         int size = p.getSize();
-        asignaciones += 6; 
 
-        int r1 = rand.nextInt(size);
-        int c1 = rand.nextInt(size);
-        int r2 = rand.nextInt(size);
-        int c2 = rand.nextInt(size);
+        int swaps = 1 + rand.nextInt(3); // 1 a 3 swaps
 
-        comparaciones++;
-        if (r1 == r2 && c1 == c2) return;
+        for (int s = 0; s < swaps; s++) {
+            int r1 = rand.nextInt(size);
+            int c1 = rand.nextInt(size);
+            int r2 = rand.nextInt(size);
+            int c2 = rand.nextInt(size);
 
-        asignaciones += 2; 
-        Pieza a = p.getPieza(r1, c1);
-        Pieza b = p.getPieza(r2, c2);
+            if (r1 == r2 && c1 == c2) continue;
 
-        comparaciones++;
-        if (a != null && b != null) {
-            p.colocarPieza(r1, c1, b);
-            p.colocarPieza(r2, c2, a);
+            Pieza a = p.getPieza(r1, c1);
+            Pieza b = p.getPieza(r2, c2);
+
+            if (a != null && b != null) {
+                p.colocarPieza(r1, c1, b);
+                p.colocarPieza(r2, c2, a);
+            }
         }
     }
+    private Puzzle crucePorBloques(Puzzle p1, Puzzle p2) {
+        Puzzle hijo = new Puzzle(tamano);
+        boolean[] usados = new boolean[tamano * tamano];
+
+        int bloqueSize = 2; // 2x2
+
+        for (int r = 0; r < tamano; r += bloqueSize) {
+            for (int c = 0; c < tamano; c += bloqueSize) {
+
+                Puzzle fuente = RAND.nextBoolean() ? p1 : p2;
+
+                for (int i = 0; i < bloqueSize; i++) {
+                    for (int j = 0; j < bloqueSize; j++) {
+                        int rr = r + i;
+                        int cc = c + j;
+
+                        if (rr >= tamano || cc >= tamano) continue;
+
+                        Pieza pieza = fuente.getPieza(rr, cc);
+                        if (pieza == null) continue;
+
+                        int id = pieza.getId();
+                        if (!usados[id]) {
+                            hijo.colocarPieza(rr, cc, copiar(pieza));
+                            usados[id] = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // rellenar huecos
+        for (int r = 0; r < tamano; r++) {
+            for (int c = 0; c < tamano; c++) {
+                if (hijo.getPieza(r, c) == null) {
+                    Pieza p = buscarNoUsada(p1, usados);
+                    hijo.colocarPieza(r, c, copiar(p));
+                    usados[p.getId()] = true;
+                }
+            }
+        }
+        return hijo;
+    }
+    private Pieza buscarNoUsada(Puzzle p, boolean[] usados) {
+        for (int r = 0; r < tamano; r++) {
+            for (int c = 0; c < tamano; c++) {
+                Pieza pieza = p.getPieza(r, c);
+                if (pieza != null && !usados[pieza.getId()])
+                    return pieza;
+            }
+        }
+        return null;
+    }
+
+
+    private void eliminarRepetidosConMutacion() {
+        HashSet<Puzzle> vistos = new HashSet<>();
+        ArrayList<Puzzle> nuevaPoblacion = new ArrayList<>();
+
+        for (Puzzle p : puzzleList) {
+
+            // si no es repetido, se queda
+            if (!vistos.contains(p)) {
+                vistos.add(p);
+                nuevaPoblacion.add(p);
+                continue;
+            }
+
+            // es repetido → intentamos rescatarlo
+            int fitnessOriginal = p.evaluateFitness();
+            boolean rescatado = false;
+
+            for (int intentos = 0; intentos < 5; intentos++) {
+                Puzzle mutado = p.clonar();
+                mutacionLeve(mutado);
+
+                // si no cambió, es inútil
+                if (mutado.equals(p)) continue;
+
+                int fitnessNuevo = mutado.evaluateFitness();
+
+                // solo aceptamos si mejora
+                if (fitnessNuevo > fitnessOriginal) {
+                    vistos.add(mutado);
+                    nuevaPoblacion.add(mutado);
+                    rescatado = true;
+                    break;
+                }
+            }
+
+            // si no se pudo rescatar → se elimina (no se agrega)
+        }
+
+    puzzleList = nuevaPoblacion;
+}
+
     public void resolver(){
         ArrayList<Puzzle> hijos;
         for (int generation = 0; generation < 10; generation++) {
@@ -246,14 +391,29 @@ public class AlgGenetico {
             
             //metodo para mutar a la poblacion :)
             mutarPoblacion();
+            
+            eliminarRepetidosConMutacion();
+            while (puzzleList.size() < poblacionInicial) {
+                Puzzle nuevo = PuzzleFactory.copiarPuzzle(
+                    puzzleList.get(new Random().nextInt(puzzleList.size()))
+                );
+                mutacionLeve(nuevo);
+                puzzleList.add(nuevo);
+            }
+
 
         }
         Collections.sort(puzzleList, (a,b) -> b.evaluateFitness() - a.evaluateFitness());
 
         System.out.println(" MEJORES 3 RESULTADOS FINALES ");
         for (int i = 0; i < 3 && i < puzzleList.size(); i++) {
-            System.out.println("Puesto " + (i+1) +
-                " | Fitness: " + puzzleList.get(i).evaluateFitness());
+            Puzzle p = puzzleList.get(i);
+            System.out.println(
+                "Puesto " + (i + 1) +
+                " | Fitness: " + p.evaluateFitness() +
+                " | Coincidencias reales: " + p.contarCoincidenciasReales()
+            );
+            p.print();
         }
         return ;
         
