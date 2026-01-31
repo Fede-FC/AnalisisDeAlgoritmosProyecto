@@ -6,147 +6,106 @@ import auxiliar.Medicion;
 import java.util.ArrayList;
 
 public class Main {
-    static int limNumerico= 9;
-    static int supNumerico= 15;
- 
-    public static void imprimirPorFuerza(){
-        porFuerza solverFuerza = new porFuerza();
-        Medicion medidor= new Medicion();
-        System.out.println("\n\n============Algoritmo por fuerza con backtracking ============\n");
-        
-        System.out.println("---------Prueba 1---------");
-        Puzzle puzzle = new Puzzle(3);
-        puzzle = PuzzleFactory.createFixed3x3();
-        puzzle.print();
-        System.out.println("--------Deordenado---------");
-        PuzzleFactory.desordenarPuzzle(puzzle);
-        puzzle.print();
-        puzzle.limpiarTablero();
-        System.out.println("----Ordenado por fuerza----");
-         
-        medidor.iniciarMedicion();
-        solverFuerza.resolver(puzzle);
-        medidor.finMedicion();
-        solverFuerza.printInfo();
-        
-        puzzle.print();
-        System.out.println("");
-        
-        System.out.println("---------Prueba 2--------");
-        Puzzle puzzle2 = new Puzzle(5);
-        puzzle2 = PuzzleFactory.createRandom(5, supNumerico);
-        puzzle2.print();
-        System.out.println("--------Deordenado---------");
-        PuzzleFactory.desordenarPuzzle(puzzle2);
-        puzzle2.print();
-        puzzle2.limpiarTablero();
-        System.out.println("----Ordenado por fuerza----");
-        medidor.iniciarMedicion();
-        solverFuerza.resolver(puzzle2);
-        medidor.finMedicion();
-        solverFuerza.printInfo();
-        
-        puzzle2.print();
-        System.out.println("");
-        
-        
-        
-    }
     
-    public static void imprimirGreedy(){
-        Greedy greedySolve = new Greedy();
-        Medicion medidor= new Medicion();
-        System.out.println("\n\n============Algoritmo Greedy ============\n");
-        System.out.println("---------Prueba avance rapido 1---------");
-        Puzzle piezas = PuzzleFactory.createRandom(40, limNumerico);
-        Puzzle puzzle1 = new Puzzle(40);
-        piezas = PuzzleFactory.desordenarPuzzle(piezas);
-        System.out.println("----Ordenado de avance rapido 1----");
-        puzzle1.definirPiezas(piezas.getPiezas());
-        medidor.iniciarMedicion();
-        greedySolve.solve(puzzle1, limNumerico);
-        medidor.finMedicion();
-        greedySolve.variables();
-        puzzle1.print();
-        
-        System.out.println("---------Prueba avance rapido 1---------");
-       
-        piezas = PuzzleFactory.createRandom(40, supNumerico);
+    static int[] fuerzaSizes = {3,5};
+    static int[] greedySizes = {3,5,10,15,20,30,40};
+    static int[] geneticoSizes = {3,5,10,15,20,30,60};
+    static int[] combinaciones = {9,15};
 
-        piezas = PuzzleFactory.desordenarPuzzle(piezas);
+    public static void main(String[] args) {
 
-        System.out.println("----Ordenado de avance rapido 1----");
-        puzzle1.definirPiezas(piezas.getPiezas());
-        medidor.iniciarMedicion();
-        greedySolve.solve(puzzle1, supNumerico);
-        medidor.finMedicion();
-        greedySolve.variables();
-        puzzle1.print();
-    }
-    public static void imprimirGenetico() {
+        for(int maxValue : combinaciones){
 
-        Medicion medidor = new Medicion();
+            System.out.println("\n===============================");
+            System.out.println(" COMBINACIÓN 0.." + maxValue);
+            System.out.println("===============================\n");
 
-        int[] tamanos = {5}; // puedes agregar más si quieres
-        System.out.println("\n\n============Algoritmo Genetico ============\n");
-        for (int t = 0; t < tamanos.length; t++) {
+            for(int size : geneticoSizes){
 
-            int size = tamanos[t];
-            int maxValue = supNumerico;
+                System.out.println("\n========== Puzzle " + size + "x" + size + " ==========");
 
-            System.out.println("========= PRUEBA GENÉTICO | " + size + "x" + size + " =========");
+                // Crear UN SOLO puzzle base
+                System.out.println("Puzzle base :");
+                Puzzle base = PuzzleFactory.createRandom(size, maxValue);base.print();
+                PuzzleFactory.desordenarPuzzle(base);
+                
+                System.out.println("\nPuzzle base desordenado:");
+                base.print();
 
-            ArrayList<Puzzle> puzzleList = new ArrayList<>();
+                // Copias para cada algoritmo
+                if(size == 3 || size == 5){
+                    ejecutarFuerza(PuzzleFactory.copiarPuzzle(base), size);
+                }
 
-            // Puzzle base
-            Puzzle base = PuzzleFactory.createRandom(size, 9);
-            PuzzleFactory.desordenarPuzzle(base);
+                if(size <= 40){
+                    ejecutarGreedy(PuzzleFactory.copiarPuzzle(base), size, maxValue);
+                }
 
-            System.out.println("---- Puzzle base desordenado ----");
-            base.print();
-            System.out.println("--------------------------------");
-
-            // Tamaño de población
-            int poblacionInicial = 30;
-            if (size < 30) {
-                poblacionInicial = size;
+                ejecutarGenetico(PuzzleFactory.copiarPuzzle(base), size, maxValue);
             }
-            poblacionInicial++;
-            puzzleList.add(base);
-
-            // Generar población inicial
-            for (int i = 0; i < poblacionInicial - 1; i++) {
-                Puzzle copia = PuzzleFactory.copiarPuzzle(base);
-                PuzzleFactory.desordenarPuzzle(copia);
-                puzzleList.add(copia);
-
-                System.out.println("Individuo " + (i + 1));
-                copia.print();
-                System.out.println("Fitness: " + copia.evaluateFitness());
-                System.out.println("--------------------------------");
-            }
-
-            // Ejecutar algoritmo genético
-            AlgGenetico ag = new AlgGenetico(puzzleList);
-
-            System.out.println("---- Ejecutando algoritmo genético ----");
-            medidor.iniciarMedicion();
-            ag.resolver();
-            medidor.finMedicion();
-            System.out.println(ag.getAsignaciones()+ "");
-            System.out.println(ag.getComparaciones() + "");
-            
-            System.out.println("=============================================\n");
         }
     }
 
-    
-    public static void main(String[] args) {
+    // ================= FUERZA =================
+    public static void ejecutarFuerza(Puzzle puzzle, int size){
+        porFuerza solver = new porFuerza();
+        Medicion medidor = new Medicion();
 
-        imprimirPorFuerza();
-        imprimirGreedy();
-        imprimirGenetico();
-        
+        System.out.println("\n--- Fuerza Bruta ---");
+
+        puzzle.limpiarTablero();
+
+        medidor.iniciarMedicion();
+        solver.resolver(puzzle);
+        medidor.finMedicion();
+
+        solver.printInfo();
+        puzzle.print();
     }
-    
+
+    // ================= GREEDY =================
+    public static void ejecutarGreedy(Puzzle puzzle, int size, int maxValue){
+        Greedy greedy = new Greedy();
+        Medicion medidor = new Medicion();
+
+        System.out.println("\n--- Greedy ---");
+
+        Puzzle tablero = new Puzzle(size);
+        tablero.definirPiezas(puzzle.getPiezas());
+
+        medidor.iniciarMedicion();
+        greedy.solve(tablero, maxValue);
+        medidor.finMedicion();
+
+        greedy.variables();
+        tablero.print();
+    }
+
+    // ================= GENÉTICO =================
+    public static void ejecutarGenetico(Puzzle puzzle, int size, int maxValue){
+
+        System.out.println("\n--- Genético ---");
+
+        Medicion medidor = new Medicion();
+        ArrayList<Puzzle> poblacion = new ArrayList<>();
+
+        int poblacionInicial = Math.min(size + 1, 30);
+        poblacion.add(puzzle);
+
+        for(int i=0;i<poblacionInicial-1;i++){
+            Puzzle copia = PuzzleFactory.copiarPuzzle(puzzle);
+            PuzzleFactory.desordenarPuzzle(copia);
+            poblacion.add(copia);
+        }
+
+        AlgGenetico ag = new AlgGenetico(poblacion);
+
+        medidor.iniciarMedicion();
+        ag.resolver();
+        medidor.finMedicion();
+
+        System.out.println("Asignaciones: " + ag.getAsignaciones());
+        System.out.println("Comparaciones: " + ag.getComparaciones());
+    }
 }
+
