@@ -18,7 +18,11 @@ public class AlgGenetico {
     private long comparaciones = 0;
     private static final Random RAND = new Random();
 
-
+    /**
+    * Constructor del algoritmo genético.
+    * Inicializa la población, el tamaño del puzzle y la lista de hijos.
+    * Ajusta el tamaño de la población inicial si el puzzle es pequeño.
+    */
     public AlgGenetico(ArrayList<Puzzle> puzzlelist) {
         asignaciones += 3; // puzzleList, tamano, hijos
         this.puzzleList = puzzlelist;
@@ -31,7 +35,11 @@ public class AlgGenetico {
             poblacionInicial = puzzlelist.get(0).getSize();
         }
     }
-    
+    /**
+    * Realiza el proceso de cruce entre los individuos de la población.
+    * Selecciona padres mediante torneo, aplica cruce PMX y optimización local
+    * para generar una nueva lista de hijos.
+    */
     public ArrayList<Puzzle> cruce(ArrayList<Puzzle> ancestros) {
         hijos.clear();
         asignaciones += 2; // random, listaPuzzles
@@ -80,7 +88,10 @@ public class AlgGenetico {
         }
         return hijos;
     }
-
+    /**
+    * Aplica el operador de cruce PMX (Partially Mapped Crossover) entre dos padres.
+    * Genera un nuevo Puzzle manteniendo la validez de las piezas y evitando duplicados.
+    */
     public Puzzle crucePMX(Puzzle padre, Puzzle madre, int puntoA, int puntoB) {
         int totPiezas = tamano * tamano;
         asignaciones += 5; 
@@ -137,7 +148,7 @@ public class AlgGenetico {
             }
         }
 
-        // Rellenar nulos
+        
         for (int i = 0; i < totPiezas; i++) {
             comparaciones += 2;
             asignaciones++; 
@@ -149,7 +160,7 @@ public class AlgGenetico {
 
         for (int i = 0; i < totPiezas; i++) {
             comparaciones++;
-            asignaciones += 3; // i++, row, column
+            asignaciones += 3; 
             int row = i / tamano;
             int column = i % tamano;
             nuevo.colocarPieza(row, column, hijo[i]);
@@ -157,6 +168,10 @@ public class AlgGenetico {
         return nuevo;
     }
     
+    /**
+    * Selecciona un individuo de la población mediante torneo.
+    * Elige k candidatos aleatorios y devuelve el de mayor fitness.
+    */
     private Puzzle torneo(ArrayList<Puzzle> poblacion, int k) {
         Random rand = new Random();
         Puzzle mejor = null;
@@ -169,28 +184,44 @@ public class AlgGenetico {
         }
         return mejor;
     }
-
+    
+    /**
+     * Verifica si un arreglo de piezas contiene una pieza con un ID específico.
+     */
     private boolean contiene(Pieza[] arr, int id) {
         for (Pieza p : arr) {
-            comparaciones += 2; // p != null y id check
+            comparaciones += 2; 
             if (p != null && p.getId() == id) return true;
         }
         return false;
     }
-
+    
+    /**
+    * Busca la posición de una pieza con un ID específico dentro de un arreglo.
+    * Devuelve el índice donde se encuentra o -1 si no existe.
+    */
     private int buscarPos(Pieza[] arr, int id) {
         for (int i = 0; i < arr.length; i++) {
-            comparaciones += 2; // i < length y id check
+            comparaciones += 2; 
             if (arr[i].getId() == id) return i;
         }
         return -1;
     }
-
+    
+    /**
+    * Crea una copia profunda de una pieza, evitando usar las
+    * referencias de los padres.
+    */
     private Pieza copiar(Pieza p) {
-        asignaciones++; // El nuevo objeto
+        asignaciones++; 
         return new Pieza(p.getTop(), p.getRight(), p.getBottom(), p.getLeft(), p.getId());
     }
-
+    
+    /**
+     * Aplica mutaciones a la población para mantener diversidad genética.
+     * Mutan los individuos repetidos o con cierta probabilidad,
+     * aceptando solo mutaciones que no empeoren el fitness.
+     */
     public void mutarPoblacion() {
         HashSet<Puzzle> vistos = new HashSet<>();
         asignaciones++;
@@ -223,6 +254,11 @@ public class AlgGenetico {
         }
     }
 
+    /**
+    * Aplica una optimización local tipo búsqueda por intercambio.
+    * Intenta mejorar el fitness intercambiando pares de piezas
+    * durante un número limitado de intentos.
+    */
     private void optimizacionLocal(Puzzle p, int intentos) {
         Random rand = new Random();
         int mejorFitness = p.evaluateFitness();
@@ -253,7 +289,10 @@ public class AlgGenetico {
             }
         }
     }
-
+    /**
+    * Realiza una mutación leve sobre un puzzle.
+    * Consiste en uno o varios intercambios aleatorios de piezas.
+    */
     private void mutacionLeve(Puzzle p) {
         Random rand = new Random();
         int size = p.getSize();
@@ -277,7 +316,11 @@ public class AlgGenetico {
             }
         }
     }
-
+    
+    /**
+    * Elimina puzzles repetidos de la población.
+    * Intenta rescatar los repetidos aplicando mutaciones que mejoren el fitness.
+    */
     private void eliminarRepetidosConMutacion() {
         HashSet<Puzzle> vistos = new HashSet<>();
         ArrayList<Puzzle> nuevaPoblacion = new ArrayList<>();
@@ -291,7 +334,7 @@ public class AlgGenetico {
                 continue;
             }
 
-            // es repetido → intentamos rescatarlo
+            // es repetido, se intentamos rescatarlo
             int fitnessOriginal = p.evaluateFitness();
             boolean rescatado = false;
 
